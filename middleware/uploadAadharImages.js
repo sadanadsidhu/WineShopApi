@@ -11,27 +11,22 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage }).array('file', 2);
+const upload = multer({ storage: storage }).single('file');
 
 const uploadFile = (req, res) => {
     upload(req, res, function (err) {
-      if (err instanceof multer.MulterError) {
-        res.status(500).json({ error: 'File upload failed' });
-      } else if (err) {
-        res.status(500).json({ error: 'Unknown error occurred' });
-      } else {
-        const frontImage = req.files[0];
-        const backImage = req.files[1];
-        
-        console.log(frontImage, backImage, "photos uploaded");
-  
-        res.status(200).json({ 
-          frontFilename: frontImage.filename,
-          backFilename: backImage.filename 
-        });
-      }
+        if (err instanceof multer.MulterError) {
+            res.status(500).json({ error: 'File upload failed' });
+        } else if (err) {
+            res.status(500).json({ error: 'Unknown error occurred' });
+        } else {
+            const uploadedImage = req.file;
+            console.log(uploadedImage, "photo uploaded");
+
+            res.status(200).json({ filename: uploadedImage.filename });
+        }
     });
-}; 
+};  
 
 ////////////////edit image 
 const updateImage = (req, res) => {
