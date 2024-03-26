@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const uploadController = require('../controllers/uploadAadharImages');
+const uploadController = require('../middleware/uploadAadharImages');
 
 // Route for uploading a file
 router.put('/edit/aadhar/:filename', uploadController.updateImage);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const uploadController = require('../controllers/uploadImageController');
+const uploadController = require('../middleware/uploadImageController');
 
 // Route for uploading a file
 router.put('/edit/images/:filename', uploadController.updateImage);
