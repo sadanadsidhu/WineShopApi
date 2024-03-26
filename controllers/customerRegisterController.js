@@ -1,12 +1,9 @@
-
 const { response } = require('express');
 const Customer = require('../models/customberRegisterModel');
 const cookie = require('cookie-parser');
 
 const jwt = require('jsonwebtoken'); 
 require('dotenv').config();
-
-
 
 const generateAccessAndRefreshToken = async (userid) => {
   try {
@@ -32,17 +29,38 @@ const generateAccessAndRefreshToken = async (userid) => {
   }
 };
 
+/////////////////register customer-------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const createUser = async (req, res) => {
   try {
     // Your existing createUser code
+    const { mobileNumber, username, email } = req.body;
+
+    const existingCustomer = await Customer.findOne({
+      $or: [{ username, email }],
+    });
+    if (existingCustomer) {
+      return res
+        .status(400)
+        .json({ error: "Username and email already exist" });
+    }
+
+    const newCustomer = await Customer.create({
+      mobileNumber,
+      username,
+      email,
+    });
+
+    // Return success response if needed
+    return res
+      .status(200)
+      .json({ message: "User created successfully", user: newCustomer });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 const loginUser = async (req, res) => {
-  const { username, email } = req.body;
+  const { username, email  } = req.body;
   if (!username || !email) {
     return res.status(400).json({ error: "Username and email are required" });
   }
