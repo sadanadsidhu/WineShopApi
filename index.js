@@ -22,6 +22,8 @@ app.use('/', require("./routes/userOtpVarificationRoutes"));
 app.use('/', require("./routes/customerRegisterRoutes"));
 app.use('/', require("./routes/uploadAadharroutes"));
 app.use('/', require("./routes/uploadPanRoutes"));
+app.use('/', require("./routes/aadharFetchDataRoutes"));
+app.use('/', require("./routes/panCardFetchDataRoutes"));
 
 app.listen(process.env.PORT, () =>
 console.log(`Server is running on port ${process.env.PORT}`));
