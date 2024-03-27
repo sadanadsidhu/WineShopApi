@@ -3,6 +3,7 @@ const otpSchema=new mongoose.Schema({
 
 mobileNumber:{
     type:Number,
+    ref:'Customer',
     required:true,
 },
 otp:{

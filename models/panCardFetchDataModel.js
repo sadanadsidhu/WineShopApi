@@ -6,7 +6,7 @@ const panCardDetailsSchema = new mongoose.Schema({
     required: true
   },
   D_O_Birth: {
-    type: Date,
+    type: String,
     required: true
   },
   age: {

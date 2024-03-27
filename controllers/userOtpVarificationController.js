@@ -96,7 +96,31 @@ const verifyOtp = async (req, res) => {
   }
 }
 
+//////////////////////////get mobile number
+const getAllMobileNumbers = async (req, res) => {
+  try {
+    // Fetch all documents from the OTP verification model
+    const otpDocuments = await OtpModel.find({}, 'mobileNumber');
+
+    // Extract mobile numbers from documents
+    const mobileNumbers = otpDocuments.map(doc => doc.mobileNumber);
+
+    // Return the list of mobile numbers
+    return res.status(200).json({
+      success: true,
+      mobileNumbers: mobileNumbers
+    });
+  } catch (error) {
+    // Handle errors
+    return res.status(500).json({
+      success: false,
+      msg: error.message
+    });
+  }
+}
+
 module.exports = {
   sendOtp,
-  verifyOtp
+  verifyOtp,
+  getAllMobileNumbers
 };

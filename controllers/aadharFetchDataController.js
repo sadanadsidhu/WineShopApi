@@ -1,15 +1,15 @@
-// const mongoose = require('mongoose'); 
-// const CustomerDetails = mongoose.model('Customerdetails');
+
 const CustomerAadhaDetails = require('../models/aadharFetchDataModel');
 
 
 const createAadharDetails = async (req, res) => {
     try {
-      const { D_O_Birth, address, aadharNumber } = req.body;
+      const { D_O_Birth, address, aadharNumber,age } = req.body;
       const newAadharDetail = new CustomerAadhaDetails({
         D_O_Birth,
         address,
-        aadharNumber
+        aadharNumber,
+        age
       });
       await newAadharDetail.save();
       return res.status(201).json(newAadharDetail);

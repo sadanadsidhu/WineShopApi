@@ -31,13 +31,16 @@ const generateAccessAndRefreshToken = async (userid) => {
 
 /////////////////register customer-------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const createUser = async (req, res) => {
+
   try {
     // Your existing createUser code
     const { mobileNumber, username, email } = req.body;
 
     const existingCustomer = await Customer.findOne({
+      
       $or: [{ username, email }],
     });
+    
     if (existingCustomer) {
       return res
         .status(400)
@@ -95,7 +98,22 @@ const loginUser = async (req, res) => {
     });
 };
 
+/////////////////////get User 
+
+const getUsersByMobileNumber = async (req, res) => {
+  try {
+    const { mobileNumber } = req.params;
+    const users = await Customer.find({ mobileNumber });
+    
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = { 
   createUser,
   loginUser,
+  getUsersByMobileNumber,
 };
