@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+                
 const panCardDetailsSchema = new mongoose.Schema({
   panCardNumber: {
     type: String,
@@ -14,8 +14,6 @@ const panCardDetailsSchema = new mongoose.Schema({
     required: true
   }
 });
-
 const PanCardDetails = mongoose.model('PanCardDetails', panCardDetailsSchema);
-
 module.exports = PanCardDetails;
  
