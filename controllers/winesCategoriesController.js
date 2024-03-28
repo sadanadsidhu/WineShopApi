@@ -24,24 +24,23 @@ const getCategoryById = async (req, res) => {
   }
 };
 // POST create a new category
-const createCategory=  async (req, res) => {
+const createCategory = async (req, res) => {
   try {
     // Destructure request body to extract category data
-    const { id, name, description,image} = req.body;
+    const { id, name, description, images } = req.body;
 
     // Create a new category instance
     const newCategory = new Category({
       id,
       name,
       description,
-      image
-      
+      images // Assuming images is an array of image paths
     });
 
     // Save the category to the database
-    await newCategory.save();
+    const savedCategory = await newCategory.save();
 
-    res.status(201).json({ message: 'Category created successfully', category: newCategory });
+    res.status(201).json({ message: 'Category created successfully', category: savedCategory });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
