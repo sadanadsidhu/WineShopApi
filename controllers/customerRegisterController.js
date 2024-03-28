@@ -52,11 +52,37 @@ const createUser = async (req, res) => {
       username,
       email,
     });
-
+    const user = await Customer.findOne({
+      $or: [{ username }, { email }]
+    });
+    if (!user) {
+      return res.status(404).json({ error: "User doesn't exist" });
+    }
+    const { accessToken, refreshToken, error } = await generateAccessAndRefreshToken(user._id);
+    if (error) {
+      return res.status(500).json({ error });
+    }
+  
+    const loggedinUser = await Customer.findById(user._id).select("-refreshToken");
+  
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+    
+    return res.status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
+        user: loggedinUser,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        message: "User register in successfully"
+      });
     // Return success response if needed
-    return res
-      .status(200)
-      .json({ message: "User created successfully", user: newCustomer });
+    // return res
+    //   .status(200)
+    //   .json({ message: "User created successfully", user: newCustomer });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -68,34 +94,6 @@ const loginUser = async (req, res) => {
     return res.status(400).json({ error: "Username and email are required" });
   }
 
-  const user = await Customer.findOne({
-    $or: [{ username }, { email }]
-  });
-  if (!user) {
-    return res.status(404).json({ error: "User doesn't exist" });
-  }
-
-  const { accessToken, refreshToken, error } = await generateAccessAndRefreshToken(user._id);
-  if (error) {
-    return res.status(500).json({ error });
-  }
-
-  const loggedinUser = await Customer.findById(user._id).select("-refreshToken");
-
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-  
-  return res.status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json({
-      user: loggedinUser,
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      message: "User logged in successfully"
-    });
 };
 
 /////////////////////get User 

@@ -12,10 +12,10 @@ const categorySchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  image: {
-     type: String, 
-     required: false 
-    }
+  images: { 
+    type: String, 
+    required: false 
+  }
 });
 
 // Create model based on schema
