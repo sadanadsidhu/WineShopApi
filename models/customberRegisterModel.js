@@ -66,7 +66,6 @@ require("dotenv").config();
 const CustomerSchema = new Schema({
   mobileNumber: {
     type: Number,
-    ref: "Otp",
     required: true,
   },
   username: {
