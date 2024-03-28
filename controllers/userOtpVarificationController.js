@@ -1,14 +1,17 @@
 const dotenv = require("dotenv").config();
 
-const axios = require('axios');
-const OtpModel = require('../models/userOtpVarificationModel');
-const otpGenerator = require('otp-generator');
-
+const axios = require("axios");
+const OtpModel = require("../models/userOtpVarificationModel");
+const otpGenerator = require("otp-generator");
 
 const sendOtp = async (req, res) => {
   try {
     const { mobileNumber } = req.body;
-    const otp = otpGenerator.generate(4, { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false });
+    const otp = otpGenerator.generate(4, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
+    });
     const cDate = new Date();
 
     const otpExpiration = new Date();
@@ -26,7 +29,7 @@ const sendOtp = async (req, res) => {
       const newOtpDoc = new OtpModel({
         mobileNumber,
         otp,
-        otpExpiration: new Date(cDate.getDate())
+        otpExpiration: new Date(cDate.getDate()),
       });
       await newOtpDoc.save();
     }
@@ -40,9 +43,9 @@ const sendOtp = async (req, res) => {
       // Send success response
       return res.status(200).json({
         success: true,
-        msg: 'OTP sent successfully!',
+        msg: "OTP sent successfully!",
         mobileNumber: otpDoc.mobileNumber,
-        otp: otpDoc.otp
+        otp: otpDoc.otp,
       });
     } else {
       throw new Error("Failed to send OTP via API.");
@@ -51,19 +54,19 @@ const sendOtp = async (req, res) => {
     // Handle errors
     return res.status(500).json({
       success: false,
-      msg: error.message
+      msg: error.message,
     });
   }
-}
+};
 
 //////-------------------- veryfi otp------------------------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 const verifyOtp = async (req, res) => {
   try {
-    const { otp } = req.body;
+    const { mobileNumber, otp } = req.body;
 
     // Check if the OTP exists in the database
-    const otpDoc = await OtpModel.findOne({ otp }).exec();
+    const otpDoc = await OtpModel.findOne({ mobileNumber, otp }).exec();
 
     if (otpDoc) {
       // Check if OTP is expired
@@ -71,32 +74,32 @@ const verifyOtp = async (req, res) => {
       if (currentTime < otpDoc.otpExpiration) {
         return res.status(400).json({
           success: false,
-          msg: 'OTP has expired. Please request a new one.'
+          msg: "OTP has expired. Please request a new one.",
         });
       }
 
       // OTP is valid
       return res.status(200).json({
         success: true,
-        msg: 'OTP is valid.'
+        msg: "OTP is valid.",
       });
     } else {
       // OTP is invalid
       return res.status(400).json({
         success: false,
-        msg: 'Invalid OTP.'
+        msg: "Invalid OTP or mobileNumber.",
       });
     }
   } catch (error) {
     // Handle errors
     return res.status(500).json({
       success: false,
-      msg: error.message
+      msg: error.message,
     });
   }
-}
+};
 
 module.exports = {
   sendOtp,
-  verifyOtp
+  verifyOtp,
 };

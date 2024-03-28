@@ -1,7 +1,7 @@
 const mongoose = require('mongoose'); 
 const customeraadharDetailSchema = new mongoose.Schema({
   D_O_Birth: { 
-    type: Date, 
+    type: String, 
     required: true 
   },
   address: { 
@@ -12,6 +12,10 @@ const customeraadharDetailSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  age:{
+    type:Number,
+    required:true
+  }
  
 });
 

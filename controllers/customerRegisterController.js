@@ -36,7 +36,7 @@ const createUser = async (req, res) => {
     const { mobileNumber, username, email } = req.body;
 
     const existingCustomer = await Customer.findOne({
-      $or: [{ username, email }],
+         email 
     });
     if (existingCustomer) {
       return res
@@ -59,6 +59,9 @@ const createUser = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+//////////////////////////---------login
 const loginUser = async (req, res) => {
   const { username, email  } = req.body;
   if (!username || !email) {
