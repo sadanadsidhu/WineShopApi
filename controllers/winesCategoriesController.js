@@ -51,11 +51,13 @@ const createCategory = async (req, res) => {
   try {
     // Destructure request body to extract category data
     const { id, name, description } = req.body;
-    let images;
+    let images = [];
 
-    // Check if a file is attached to the request
-    if (req.file) {
-      images = req.file.filename; // Assuming images is a single image path
+    // Check if files are attached to the request
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        images.push(file.filename);
+      });
     } else {
       return res.status(400).json({ message: 'No file uploaded' });
     }
@@ -77,6 +79,7 @@ const createCategory = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 
 

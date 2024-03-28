@@ -1,33 +1,33 @@
 const { response } = require('express');
 const Customer = require('../models/customberRegisterModel');
-const cookie = require('cookie-parser');
+// const cookie = require('cookie-parser');
 
-const jwt = require('jsonwebtoken'); 
-require('dotenv').config();
+// const jwt = require('jsonwebtoken'); 
+// require('dotenv').config();
 
-const generateAccessAndRefreshToken = async (userid) => {
-  try {
-    const user = await Customer.findById(userid);
-    if (!user) {
-      throw new Error("User not found");
-    }
+// const generateAccessAndRefreshToken = async (userid) => {
+//   try {
+//     const user = await Customer.findById(userid);
+//     if (!user) {
+//       throw new Error("User not found");
+//     }
 
-    // Generate access token
-    const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+//     // Generate access token
+//     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
 
-    // Generate refresh token
-    const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
+//     // Generate refresh token
+//     const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
 
-    // Update user's refresh token in the database
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
+//     // Update user's refresh token in the database
+//     user.refreshToken = refreshToken;
+//     await user.save({ validateBeforeSave: false });
 
-    return { accessToken, refreshToken };
-  } catch (error) {
-    console.error(error);
-    throw new Error("Something went wrong");
-  }
-};
+//     return { accessToken, refreshToken };
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error("Something went wrong");
+//   }
+// };
 
 /////////////////register customer-------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const createUser = async (req, res) => {
@@ -58,27 +58,27 @@ const createUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User doesn't exist" });
     }
-    const { accessToken, refreshToken, error } = await generateAccessAndRefreshToken(user._id);
-    if (error) {
-      return res.status(500).json({ error });
-    }
+    // const { accessToken, refreshToken, error } = await generateAccessAndRefreshToken(user._id);
+    // if (error) {
+    //   return res.status(500).json({ error });
+    // }
   
-    const loggedinUser = await Customer.findById(user._id).select("-refreshToken");
+    // const loggedinUser = await Customer.findById(user._id).select("-refreshToken");
   
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
+    // const options = {
+    //   httpOnly: true,
+    //   secure: true,
+    // };
     
-    return res.status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
-      .json({
-        user: loggedinUser,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        message: "User register in successfully"
-      });
+    // return res.status(200)
+    //   .cookie("accessToken", accessToken, options)
+    //   .cookie("refreshToken", refreshToken, options)
+    //   .json({
+    //     user: loggedinUser,
+    //     accessToken: accessToken,
+    //     refreshToken: refreshToken,
+    //     message: "User register in successfully"
+    //   });
     // Return success response if needed
     // return res
     //   .status(200)
