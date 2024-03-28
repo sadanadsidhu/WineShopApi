@@ -13,8 +13,6 @@ const sendOtp = async (req, res) => {
 
     const otpExpiration = new Date();
     otpExpiration.setMinutes(otpExpiration.getMinutes() + 10);
-
-    // Update the OTP in the database
     const otpDoc = await OtpModel.findOneAndUpdate(
       { mobileNumber },
       { otp, otpExpiration: new Date(cDate.getDate()) },
@@ -22,7 +20,6 @@ const sendOtp = async (req, res) => {
     ).exec();
 
     if (!otpDoc) {
-      // If OTP document doesn't exist, create a new one
       const newOtpDoc = new OtpModel({
         mobileNumber,
         otp,
@@ -34,10 +31,7 @@ const sendOtp = async (req, res) => {
     // Send OTP via API
     const apiUrl = `https://bulksmsby.in/api/api.php?apikey=${process.env.BULKSMS_API_KEY}&to=${mobileNumber}&senderid=${process.env.BULKSMS_SENDER_ID}&msg=Thanks for payment Rs ${otp} for {%23var%23} - TDR SOFTWARE PVT LTD&templateID=${process.env.BULKSMS_TEMPLET_ID}`;
     const response = await axios.get(apiUrl);
-
-    // Check if API call was successful
     if (response.status === 200) {
-      // Send success response
       return res.status(200).json({
         success: true,
         msg: 'OTP sent successfully!',
@@ -48,7 +42,6 @@ const sendOtp = async (req, res) => {
       throw new Error("Failed to send OTP via API.");
     }
   } catch (error) {
-    // Handle errors
     return res.status(500).json({
       success: false,
       msg: error.message
@@ -60,35 +53,27 @@ const sendOtp = async (req, res) => {
 
 const verifyOtp = async (req, res) => {
   try {
-    const { otp } = req.body;
-
-    // Check if the OTP exists in the database
-    const otpDoc = await OtpModel.findOne({ otp }).exec();
-
+    const { otp, mobileNumber } = req.body;
+    const otpDoc = await OtpModel.findOne({ otp, mobileNumber }).exec();
     if (otpDoc) {
-      // Check if OTP is expired
       const currentTime = new Date();
       if (currentTime < otpDoc.otpExpiration) {
         return res.status(400).json({
           success: false,
           msg: 'OTP has expired. Please request a new one.'
         });
-      }
-
-      // OTP is valid
+      }  
       return res.status(200).json({
         success: true,
         msg: 'OTP is valid.'
       });
     } else {
-      // OTP is invalid
       return res.status(400).json({
         success: false,
-        msg: 'Invalid OTP.'
+        msg: 'Invalid OTP or mobile number.'
       });
     }
   } catch (error) {
-    // Handle errors
     return res.status(500).json({
       success: false,
       msg: error.message
@@ -96,29 +81,22 @@ const verifyOtp = async (req, res) => {
   }
 }
 
-//////////////////////////get mobile number
+//////////////////////////get all mobile number--------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const getAllMobileNumbers = async (req, res) => {
   try {
-    // Fetch all documents from the OTP verification model
     const otpDocuments = await OtpModel.find({}, 'mobileNumber');
-
-    // Extract mobile numbers from documents
     const mobileNumbers = otpDocuments.map(doc => doc.mobileNumber);
-
-    // Return the list of mobile numbers
     return res.status(200).json({
       success: true,
       mobileNumbers: mobileNumbers
     });
   } catch (error) {
-    // Handle errors
     return res.status(500).json({
       success: false,
       msg: error.message
     });
   }
 }
-
 module.exports = {
   sendOtp,
   verifyOtp,

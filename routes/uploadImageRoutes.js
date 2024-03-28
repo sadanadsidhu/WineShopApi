@@ -6,6 +6,7 @@ const uploadController = require('../middleware/uploadImageController');
 router.put('/edit/images/:filename', uploadController.updateImage);
 router.post('/upload/images', uploadController.uploadFile);
 router.delete('/delete/images/:filename',uploadController.deleteImage);
+router.get('/get/image/:imageName',uploadController.getImage);
 
 module.exports = router;
  

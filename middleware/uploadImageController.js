@@ -62,10 +62,24 @@ const deleteImage = (req, res) => {
   }
 };
 
+//////////////////get images
+const getImage = (req, res) => {
+  try {
+    const { imageName } = req.params;
+    // You can perform additional validation or processing here if needed
+
+    // Send the requested image file
+    res.sendFile(path.join(__dirname, '..', 'images', imageName));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 module.exports = { deleteImage };
 
 module.exports = {
      uploadFile,
      updateImage,
-     deleteImage
+     deleteImage,
+     getImage
      };
