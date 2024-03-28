@@ -89,7 +89,8 @@ const createUser = async (req, res) => {
   }
 };
 
-/////////////////login------------------------------>>>>>>>>>>>>>>>>>>>>>>>>
+
+//////////////////////////---------login
 const loginUser = async (req, res) => {
   const { username, email  } = req.body;
   if (!username || !email) {

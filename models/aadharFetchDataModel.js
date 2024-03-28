@@ -12,10 +12,11 @@ const customeraadharDetailSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
- age:{
+  age:{
     type:Number,
     required:true
- }
+  }
+ 
 });
 
 // Create model based on schema

@@ -30,6 +30,6 @@ const getAadharDetails = async (req, res) => {
 };
 
 module.exports = {
-createAadharDetails,
-getAadharDetails
+  createAadharDetails,
+  getAadharDetails,
 };
