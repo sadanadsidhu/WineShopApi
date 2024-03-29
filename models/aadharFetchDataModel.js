@@ -18,8 +18,7 @@ const customeraadharDetailSchema = new mongoose.Schema({
   }
  
 });
-
-// Create model based on schema
+    
 const Category = mongoose.model('CustomerAadhaDetails', customeraadharDetailSchema);
 
 module.exports = Category;
