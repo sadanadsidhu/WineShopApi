@@ -4,14 +4,13 @@ const router = express.Router();
 const {
      sendOtp,
      verifyOtp,
-     getAllMobileNumbers
+     getMobileNumberstatus
      } = require('../controllers/userOtpVarificationController');
 
 // Define routes
 router.post('/send-otp', sendOtp);
 router.post('/verify-otp', verifyOtp);
-router.get('/get-all-mobileNumber', getAllMobileNumbers);
-
+router.get('/get-mobile-status/:mobileNumber', getMobileNumberstatus);
 module.exports = router;
 
 
