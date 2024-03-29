@@ -63,8 +63,6 @@ const deleteImage = (req, res) => {
   }
 };
 
-module.exports = { deleteImage };
-
 module.exports = {
   uploadFile,
   updateImage,
