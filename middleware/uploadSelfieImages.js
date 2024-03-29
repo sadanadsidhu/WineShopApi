@@ -6,7 +6,8 @@ const storage = multer.diskStorage({
     cb(null, "./imageselfie"); // Specify the destination folder here
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Append the current timestamp to the filename
+    const uniqueFilename =  file.originalname;
+    cb(null, uniqueFilename); // Append the current timestamp to the filename
   },
 });
 
