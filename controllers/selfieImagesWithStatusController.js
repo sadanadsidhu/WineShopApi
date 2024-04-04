@@ -1,5 +1,3 @@
-// controllers/selfieController.js
-
 const UserSelfie = require('../models/selfieImagesWithStatusModel');
 
 // Get all selfies
