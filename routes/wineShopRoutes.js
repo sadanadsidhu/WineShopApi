@@ -4,9 +4,9 @@ const wineShopController = require("../controllers/wineShopController");
 
 // const basePath = "/wineShops";
 
-router.post("/wineshop", wineShopController.createWineShop);
+router.post("/create-wineshop", wineShopController.createWineShop);
 router.put("/wineshop/:id", wineShopController.updateWineShop);
-router.get("/wineshop", wineShopController.getAllWineShops);
-router.delete("/wineshop/:id", wineShopController.deleteWineShop);
+router.get("/get-all-shoplocation", wineShopController.getAllWineShops);
+// router.delete("/wineshop/:id", wineShopController.deleteWineShop);
 
 module.exports = router;

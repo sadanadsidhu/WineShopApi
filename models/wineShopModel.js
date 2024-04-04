@@ -5,14 +5,14 @@ const wineShopSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    latitude: Number,
-    longitude: Number,
-    availableItems: [{
-        subId: Number,
-        category: String,
-        name: String,
-        image: String,
-    }]
+    latitude: {
+        type: Number,
+        required: true
+    },
+    longitude: {
+        type: Number,
+        required: true
+    }
 });
 
 const WineShop = mongoose.model("WineShop", wineShopSchema);

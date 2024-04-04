@@ -3,11 +3,11 @@ const path = require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./imageselfie"); // Specify the destination folder here
+    cb(null, "./imageselfie");
   },
   filename: function (req, file, cb) {
     const uniqueFilename =  file.originalname;
-    cb(null, uniqueFilename); // Append the current timestamp to the filename
+    cb(null, uniqueFilename);
   },
 });
 

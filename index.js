@@ -26,6 +26,8 @@ app.use('/', require("./routes/aadharFetchDataRoutes"));
 app.use('/', require("./routes/panCardFetchDataRoutes"));
 app.use('/', require("./routes/uploadSelfieImages"));
 app.use('/', require("./routes/selfieImagesWithStatusRoutes"));
+app.use('/', require("./routes/wineSubCategoriesImagesRoutes"));
+app.use('/', require("./routes/wineSubCategoriesRoutes"));
 
 app.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`)

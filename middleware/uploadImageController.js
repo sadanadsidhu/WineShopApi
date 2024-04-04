@@ -75,8 +75,6 @@ const getImage = (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-module.exports = { deleteImage };
-
 module.exports = {
      uploadFile,
      updateImage,

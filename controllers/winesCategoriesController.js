@@ -1,5 +1,6 @@
 const Category = require('../models/winesCategoriesModel');
 
+const multer = require('multer'); // Assuming you've installed multer
 
 // GET all categories
 const getAllCategories = async (req, res) => {
@@ -24,64 +25,72 @@ const getCategoryById = async (req, res) => {
   }
 };
 // POST create a new category
-// const createCategory=  async (req, res) => {
+
+// const createCategory = async (req, res) => {
 //   try {
-//     // Destructure request body to extract category data
-//     const { id, name, description,image} = req.body;
+//     const { name, description } = req.body;
+//     const imagePath = './images'; // Get the path of the uploaded image
 
 //     // Create a new category instance
 //     const newCategory = new Category({
-//       id,
 //       name,
 //       description,
-//       image
-      
+//       images: imagePath // Store the path to the uploaded image
 //     });
 
 //     // Save the category to the database
-//     await newCategory.save();
+//     const savedCategory = await newCategory.save();
 
-//     res.status(201).json({ message: 'Category created successfully', category: newCategory });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: 'Server error' });
+//     res.status(201).json(savedCategory); // Return the created category
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
 //   }
 // };
+// const upload = multer({ dest: './images' })
+// const createCategory =(upload.single('file'),async (req, res) => {
+//   try {
+//     const { name, description } = req.body;
+//     let imagePaths = ''; // Assuming you want to store a single image path
+
+//     if (req.file) {
+//       imagePaths.push(req.file.filename); // Extract filename from uploaded file
+//     }
+
+//     const newCategory = new Category({
+//       name,
+//       description,
+//       images: imagePaths,
+//     });
+
+//     const savedCategory = await newCategory.save();
+
+//     res.status(201).json(savedCategory); // Return the created category
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
 const createCategory = async (req, res) => {
   try {
-    // Destructure request body to extract category data
-    const { id, name, description } = req.body;
-    let images = [];
-
-    // Check if files are attached to the request
-    if (req.files && req.files.length > 0) {
-      req.files.forEach(file => {
-        images.push(file.filename);
-      });
-    } else {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
+    const { name, description, images } = req.body;
 
     // Create a new category instance
     const newCategory = new Category({
-      id,
       name,
       description,
-      images
+      images // assuming image is an optional field
     });
 
     // Save the category to the database
     const savedCategory = await newCategory.save();
 
-    res.status(201).json({ message: 'Category created successfully', category: savedCategory });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(201).json(savedCategory); // Return the created category
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
-
-
-
 
 // PUT update category by ID
 const updateCategory = async (req, res) => {

@@ -125,8 +125,27 @@ const verifyOtp = async (req, res) => {
     });
   }
 };
-////////////////////get all mobile number with status------------->>>>>>>
-const getMobileNumberstatus = async (req, res) => {
+
+
+
+
+// const getAllMobileNumbers = async (req, res) => {
+//   try {
+//     const otpDocuments = await OtpModel.find({}, 'mobileNumber');
+//     const mobileNumbers = otpDocuments.map(doc => doc.mobileNumber);
+//     return res.status(200).json({
+//       success: true,
+//       mobileNumbers: mobileNumbers
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       msg: error.message
+//     });
+//   }
+// }
+
+const getMobileNumberStatus = async (req, res) => {
   try {
     const { mobileNumber } = req.params;
     const otpDocument = await OtpModel.findOne({ mobileNumber }, 'status'); // Select only the status field
@@ -148,9 +167,10 @@ const getMobileNumberstatus = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   sendOtp,
   verifyOtp,
-  getMobileNumberstatus
+  getMobileNumberStatus
 };
 
