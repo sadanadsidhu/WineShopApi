@@ -26,7 +26,6 @@ const getCategoryById = async (req, res) => {
 };
 // POST create a new category
 
-
 // const createCategory = async (req, res) => {
 //   try {
 //     const { name, description } = req.body;

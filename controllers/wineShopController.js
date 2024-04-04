@@ -1,95 +1,61 @@
-const WineShop = require("../models/wineShopModel");
+const WineShop = require('../models/wineShopModel');
 
-// const createWineShop = async (req, res) => {
-    const createWineShop = async (req, res) => {
-        const {
+// Create WineShop
+const createWineShop = async (req, res) => {
+    try {
+        const { ShopName, latitude, longitude } = req.body;
+
+        // Create a new WineShop instance
+        const newWineShop = new WineShop({
             ShopName,
             latitude,
-            longitude,
-            availableItems
-        } = req.body;
-    
-        // Validate the request body against the schema
-        try {
-            const wineShop = new WineShop({
-                ShopName,
-                latitude,
-                longitude,
-                availableItems
-            });
-            
-            // Save the wine shop to the database
-            const result = await wineShop.save();
-            
-            res.status(201).json({
-                status: "success",
-                data: result
-            });
-        } catch (error) {
-            res.status(400).json({
-                status: "fail",
-                message: error.message
-            });
-        }
-    };
-   
+            longitude
+        });
 
-const updateWineShop = async (req, res) => {
-    try {
-        const wineShop = await WineShop.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
-        res.status(200).json({
-            status: "success",
-            data: {
-                wineShop
-            }
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+        // Save the wine shop to the database
+        const savedWineShop = await newWineShop.save();
+
+        res.status(201).json(savedWineShop);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
+// Update WineShop
+const updateWineShop = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { ShopName, latitude, longitude } = req.body;
+
+        const updatedWineShop = await WineShop.findByIdAndUpdate(id, { ShopName, latitude, longitude }, { new: true });
+
+        if (!updatedWineShop) {
+            return res.status(404).json({ message: 'WineShop not found' });
+        }
+
+        res.status(200).json(updatedWineShop);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+// Get all WineShops
 const getAllWineShops = async (req, res) => {
     try {
         const wineShops = await WineShop.find();
-        res.status(200).json({
-            status: "success",
-            results: wineShops.length,
-            data: {
-                wineShops
-            }
-        });
-    } catch (err) {
-        res.status(500).json({
-            status: "fail",
-            message: err.message
-        });
-    }
-};
-
-const deleteWineShop = async (req, res) => {
-    try {
-        await WineShop.findByIdAndDelete(req.params.id);
-        res.status(204).json({
-            status: "success",
-            data: null
-        });
-    } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        });
+        res.status(200).json(wineShops);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
 module.exports = {
     createWineShop,
     updateWineShop,
-    getAllWineShops,
-    deleteWineShop
+    getAllWineShops
 };
+
