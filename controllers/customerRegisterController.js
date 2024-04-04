@@ -1,33 +1,6 @@
 const { response } = require('express');
 const Customer = require('../models/customberRegisterModel');
-// const cookie = require('cookie-parser');
 
-// const jwt = require('jsonwebtoken'); 
-// require('dotenv').config();
-
-// const generateAccessAndRefreshToken = async (userid) => {
-//   try {
-//     const user = await Customer.findById(userid);
-//     if (!user) {
-//       throw new Error("User not found");
-//     }
-
-//     // Generate access token
-//     const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
-
-//     // Generate refresh token
-//     const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
-
-//     // Update user's refresh token in the database
-//     user.refreshToken = refreshToken;
-//     await user.save({ validateBeforeSave: false });
-
-//     return { accessToken, refreshToken };
-//   } catch (error) {
-//     console.error(error);
-//     throw new Error("Something went wrong");
-//   }
-// };
 
 /////////////////register customer-------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const createUser = async (req, res) => {
@@ -58,31 +31,6 @@ const createUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User doesn't exist" });
     }
-    // const { accessToken, refreshToken, error } = await generateAccessAndRefreshToken(user._id);
-    // if (error) {
-    //   return res.status(500).json({ error });
-    // }
-  
-    // const loggedinUser = await Customer.findById(user._id).select("-refreshToken");
-  
-    // const options = {
-    //   httpOnly: true,
-    //   secure: true,
-    // };
-    
-    // return res.status(200)
-    //   .cookie("accessToken", accessToken, options)
-    //   .cookie("refreshToken", refreshToken, options)
-    //   .json({
-    //     user: loggedinUser,
-    //     accessToken: accessToken,
-    //     refreshToken: refreshToken,
-    //     message: "User register in successfully"
-    //   });
-    // Return success response if needed
-    // return res
-    //   .status(200)
-    //   .json({ message: "User created successfully", user: newCustomer });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -99,14 +47,51 @@ const loginUser = async (req, res) => {
 
 };
 
-/////////////////////get User 
+/////////////////////get User      
+
+// const getUsersByMobileNumber = async (req, res) => {
+//   try {
+//     const { mobileNumber } = req.params;
+//     const users = await Customer.find({ mobileNumber });
+    
+//     return res.status(200).json({ users });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };/
 
 const getUsersByMobileNumber = async (req, res) => {
   try {
     const { mobileNumber } = req.params;
-    const users = await Customer.find({ mobileNumber });
+    const page = req.query.page ? parseInt(req.query.page) : 1; // Get the page number from query parameters, default to 1 if not provided
+    const limit = 10; // Limiting to 10 users per page
+    const skip = (page - 1) * limit; // Calculate the number of documents to skip
+
+    const users = await Customer.find({ mobileNumber }).skip(skip).limit(limit); // Skip the appropriate number of documents and limit the result to 10
     
     return res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
+
+/////////////////////delete All user data from database be carefull when you will delete data-----------
+const deleteAllUsers = async (req, res) => {
+  try {
+    // Delete all user documents
+    const result = await Customer.deleteMany({});
+    
+    // Check if any documents were deleted
+    if (result.deletedCount > 0) {
+      return res.status(200).json({ message: "All user data deleted successfully" });
+    } else {
+      return res.status(404).json({ message: "No user data found to delete" });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -117,4 +102,5 @@ module.exports = {
   createUser,
   loginUser,
   getUsersByMobileNumber,
+  deleteAllUsers
 };

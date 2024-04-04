@@ -129,13 +129,36 @@ const verifyOtp = async (req, res) => {
 
 
 
-const getAllMobileNumbers = async (req, res) => {
+// const getAllMobileNumbers = async (req, res) => {
+//   try {
+//     const otpDocuments = await OtpModel.find({}, 'mobileNumber');
+//     const mobileNumbers = otpDocuments.map(doc => doc.mobileNumber);
+//     return res.status(200).json({
+//       success: true,
+//       mobileNumbers: mobileNumbers
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       msg: error.message
+//     });
+//   }
+// }
+
+const getMobileNumberStatus = async (req, res) => {
   try {
-    const otpDocuments = await OtpModel.find({}, 'mobileNumber');
-    const mobileNumbers = otpDocuments.map(doc => doc.mobileNumber);
+    const { mobileNumber } = req.params;
+    const otpDocument = await OtpModel.findOne({ mobileNumber }, 'status'); // Select only the status field
+    if (!otpDocument) {
+      return res.status(404).json({
+        success: false,
+        msg: "Mobile number not found"
+      });
+    }
     return res.status(200).json({
       success: true,
-      mobileNumbers: mobileNumbers
+      mobileNumber: mobileNumber,
+      status: otpDocument.status
     });
   } catch (error) {
     return res.status(500).json({
@@ -143,11 +166,11 @@ const getAllMobileNumbers = async (req, res) => {
       msg: error.message
     });
   }
-}
+};
 
 module.exports = {
   sendOtp,
   verifyOtp,
-  getAllMobileNumbers
+  getMobileNumberStatus
 };
 

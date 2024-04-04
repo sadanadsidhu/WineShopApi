@@ -1,24 +1,42 @@
-const mongoose = require('mongoose'); 
+// const mongoose = require('mongoose'); 
+// const categorySchema = new mongoose.Schema({
+//   id: { 
+//     type: Number, 
+//     required: true 
+//   },
+//   name: { 
+//     type: String, 
+//     required: true
+//   },
+//   description: { 
+//     type: String, 
+//     required: true 
+//   },
+//   images: [{ 
+//     type: String, 
+//     required: true 
+//   }]
+// });
+
+// // Create model based on schema
+// const Category = mongoose.model('Category', categorySchema);
+
+// module.exports = Category;
+const mongoose = require('mongoose');
+
 const categorySchema = new mongoose.Schema({
-  id: { 
-    type: Number, 
-    required: true 
+  name: {
+    type: String,
+    required: false,
   },
-  name: { 
-    type: String, 
-    required: true
+  description: {
+    type: String,
+    required: false,
   },
-  description: { 
-    type: String, 
-    required: true 
+  // ... other fields
+  images: {
+    type: String, // Array of image paths (optional)
   },
-  images: [{ 
-    type: String, 
-    required: true 
-  }]
-});
+}, { timestamps: true }); // Add timestamps if needed
 
-// Create model based on schema
-const Category = mongoose.model('Category', categorySchema);
-
-module.exports = Category;
+module.exports = mongoose.model('Category', categorySchema);
