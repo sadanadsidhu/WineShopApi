@@ -91,5 +91,4 @@ module.exports = {
     getAllSubWineCategories,
     getSubWineCategoryById,
     deleteSubWineCategory,
-    getImagesFromFolder
 };
