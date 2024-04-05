@@ -79,7 +79,7 @@ const sendOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const { otp, mobileNumber } = req.body;
-    const otpDoc = await OtpModel.findOne({ otp, mobileNumber }).exec();
+    const otpDoc = await OtpModel.findOne({ otp, mobileNumber}).exec();
     
     if (otpDoc) {
       const currentTime = new Date();
@@ -92,7 +92,9 @@ const verifyOtp = async (req, res) => {
           httpOnly: true,
           secure: true,
         };
-
+      //////////////////status will change true
+         otpDoc.status = true;
+         await otpDoc.save();
         // Send tokens as cookies in the response
         return res.status(200)      
           .cookie("accessToken", accessToken, options)
