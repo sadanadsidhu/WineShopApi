@@ -94,9 +94,9 @@ const verifyOtp = async (req, res) => {
           httpOnly: true,  
           secure: true,   
         };
-        const status= await UserSelfie.findOne({status})
-        // otpDoc.status = true;
-        await status.save();
+        // const status= await UserSelfie.findOne({status})
+        // // otpDoc.status = true;
+        // await status.save();
         // Send tokens as cookies in the response
         return res.status(200)      
           .cookie("accessToken", accessToken, options)
