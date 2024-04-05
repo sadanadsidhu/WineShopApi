@@ -1,6 +1,8 @@
 const { response } = require('express');
 const axios = require('axios');
 const OtpModel = require('../models/userOtpVarificationModel');
+// const Otp = require('../models/userOtpVarificationModel');
+const UserSelfie = require('../models/selfieImagesWithStatusModel');
 const jwt = require('jsonwebtoken'); 
 require('dotenv').config();
 const otpGenerator = require('otp-generator');
@@ -89,12 +91,12 @@ const verifyOtp = async (req, res) => {
 
         // Set options for cookies
         const options = {
-          httpOnly: true,
-          secure: true,
+          httpOnly: true,  
+          secure: true,   
         };
-      //////////////////status will change true
-         otpDoc.status = true;
-         await otpDoc.save();
+        // const status= await UserSelfie.findOne({status})
+        // // otpDoc.status = true;
+        // await status.save();
         // Send tokens as cookies in the response
         return res.status(200)      
           .cookie("accessToken", accessToken, options)
