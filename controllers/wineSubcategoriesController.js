@@ -1,5 +1,5 @@
 const SubWineCategory = require('../models/wineSubCategoriesModel');
-const uploadController = require('../middleware/wineSubCategories');
+const getImages = require('../middleware/wineSubCategories');
 // Create SubWineCategory
 const createSubWineCategory = async (req, res) => {
     try {
@@ -75,16 +75,16 @@ const deleteSubWineCategory = async (req, res) => {
     }
 };
 
-///////////////////get images
+///////////////////get images------------------------------------------>>>>>>>>>>>>>>>>>>>>>>>
 const getImagesFromFolder = async (req, res) => {
     try {
-      const images = await uploadController.getImagesFromFolder('./imageswinesubcategories');
+      const images = await getImages.getImagesFromFolder('./imageswinesubcategories');
       res.status(200).json({ success: true, images });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
   };
-
+    
 module.exports = {
     createSubWineCategory,
     updateSubWineCategory,
