@@ -2,24 +2,22 @@ const { response } = require('express');
 const Customer = require('../models/customberRegisterModel');
 
 
-/////////////////register customer-------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const createUser = async (req, res) => {
-
   try {
-    // Your existing createUser code
     const { mobileNumber, username, email } = req.body;
 
+    // Check if user with the provided username or email already exists
     const existingCustomer = await Customer.findOne({
-      
-      $or: [{ username, email }],
+      $or: [{ username }, { email }],
     });
-    
+
     if (existingCustomer) {
       return res
         .status(400)
-        .json({ error: "Username and email already exist" });
+        .json({ error: "Username or email already exists" });
     }
 
+    // Create a new customer
     const newCustomer = await Customer.create({
       mobileNumber,
       username,
@@ -37,14 +35,12 @@ const createUser = async (req, res) => {
   }
 };
 
-
 //////////////////////////---------login
 const loginUser = async (req, res) => {
-  const { username, email  } = req.body;
+  const { username, email } = req.body;
   if (!username || !email) {
     return res.status(400).json({ error: "Username and email are required" });
   }
-
 };
 
 /////////////////////get User      
@@ -98,7 +94,7 @@ const deleteAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { 
+module.exports = {
   createUser,
   loginUser,
   getUsersByMobileNumber,
