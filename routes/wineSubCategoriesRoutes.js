@@ -11,7 +11,7 @@ const {
 // Define routes
 router.post('/wine-subcategories', createSubWineCategory);
 router.put('/wine-subcategories/:id', updateSubWineCategory);
-router.get('/wine-subcategories', getAllSubWineCategories);
+router.get('/get-all-wine-subcategories', getAllSubWineCategories);
 router.get('/wine-subcategories/:id', getSubWineCategoryById);
 router.delete('/wine-subcategories/:id', deleteSubWineCategory);
 
