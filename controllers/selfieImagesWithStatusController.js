@@ -1,4 +1,6 @@
 const UserSelfie = require('../models/selfieImagesWithStatusModel');
+const OtpModel = require('../models/userOtpVarificationModel');
+
 
 // Get all selfies
 const getAllSelfies = async (req, res) => {
@@ -25,6 +27,7 @@ const createSelfie = async (req, res) => {
       res.status(500).json({ success: false, error: error.message });
     }
   };
+
 
 module.exports = {
   getAllSelfies,
