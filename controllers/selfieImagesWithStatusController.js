@@ -19,7 +19,7 @@ const createSelfie = async (req, res) => {
       const newSelfie = await UserSelfie.create({ images });
   
       // Update status to true
-      newSelfie.status = true;
+      newSelfie.status = false;
       await newSelfie.save();
   
       res.status(201).json({ success: true, data: newSelfie });

@@ -91,17 +91,14 @@ const otpSchema = new mongoose.Schema({
         set: (otpExpiration) => otpExpiration
     },
     refreshToken: {
-        type: String
+        type: String,
+        required: true
     },
-    status:{
+    statusUser:{
       type: Schema.Types.ObjectId,
-      ref: 'UserSelfie'
-
+      ref: 'UserSelfie',
+      required:false,
 },
-    // selfie: { // Reference to UserSelfie model
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'UserSelfie'
-    // }
 });
 
 otpSchema.methods.generateAccessToken = function () {

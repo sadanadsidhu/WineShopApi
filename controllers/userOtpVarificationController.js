@@ -78,34 +78,105 @@ const sendOtp = async (req, res) => {
 };
 
 
+// const verifyOtp = async (req, res) => {
+//   try {
+//     const { otp, mobileNumber,status } = req.body;
+//     const otpDoc = await OtpModel.findOne({ otp, mobileNumber}).exec();
+
+//     if (!status) {
+//       return res.status(400).json({ message: 'Please provide categoryId' });
+//   }
+
+//   // Check if the referenced category exists
+//   const statusUser = await UserSelfie.findById(status);
+//   if (!statusUser) {
+//       return res.status(404).json({ message: 'Category not found' });
+//   }
+    
+//     if (otpDoc) {
+//       const currentTime = new Date();
+//       if (currentTime > otpDoc.otpExpiration) {
+
+//         await statusUser.save();
+//         // Generate access and refresh tokens
+//         const { accessToken, refreshToken } = await generateAccessAndRefreshToken(otpDoc._id);
+
+//         // Set options for cookies
+//         const options = {
+//           httpOnly: true,  
+//           secure: true,   
+//         };
+//         return res.status(200)      
+//           .cookie("accessToken", accessToken, options)
+//           .cookie("refreshToken", refreshToken, options)
+//           .json({
+//             success: true,
+//             msg: "Otp verify successfully and Access Token and Refresh token created",
+//             accessToken,
+//             refreshToken
+//           });
+//       } else {
+//         // OTP has expired
+//         return res.status(400).json({
+//           success: false,
+//           msg: "OTP has expired. Please request a new one.",
+//         });
+//       }
+//     } else {
+//       // Invalid OTP or mobile number
+//       return res.status(400).json({
+//         success: false,
+//         msg: 'Invalid OTP or mobile number.'
+//       });
+//     }
+//   } catch (error) {
+//     // Handle any unexpected errors
+//     return res.status(500).json({
+//       success: false,
+//       msg: error.message,
+//     });
+//   }
+// };
+
 const verifyOtp = async (req, res) => {
   try {
-    const { otp, mobileNumber } = req.body;
-    const otpDoc = await OtpModel.findOne({ otp, mobileNumber}).exec();
-    
+    const { otp, mobileNumber,statusID } = req.body;
+    const otpDoc = await OtpModel.findOne({ otp, mobileNumber }).exec();
+
+    if (!statusID ) {
+      return res.status(400).json({ message: 'Please provide categoryId' });
+    }
+
+    // Check if the referenced category exists
+    let statusUser = await UserSelfie.findById(statusID );
+    if (!statusUser) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
     if (otpDoc) {
       const currentTime = new Date();
       if (currentTime > otpDoc.otpExpiration) {
+        // Update statusUser
+        statusUser.status = !statusUser.status; // Toggle status
+        await statusUser.save();
+        const userId = statusUser._id;
         // Generate access and refresh tokens
         const { accessToken, refreshToken } = await generateAccessAndRefreshToken(otpDoc._id);
 
         // Set options for cookies
         const options = {
-          httpOnly: true,  
-          secure: true,   
+          httpOnly: true,
+          secure: true,
         };
-        // const status= await UserSelfie.findOne({status})
-        // // otpDoc.status = true;
-        // await status.save();
-        // Send tokens as cookies in the response
-        return res.status(200)      
+        return res.status(200)
           .cookie("accessToken", accessToken, options)
           .cookie("refreshToken", refreshToken, options)
           .json({
             success: true,
             msg: "Otp verify successfully and Access Token and Refresh token created",
             accessToken,
-            refreshToken
+            refreshToken,
+            statusUser,
+            userId
           });
       } else {
         // OTP has expired
@@ -130,7 +201,61 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+// const verifyOtp = async (req, res) => {
+//   try {
+//     const { otp, mobileNumber, status } = req.body;
+//     const otpDoc = await OtpModel.findOne({ otp, mobileNumber }).exec();
 
+//     if (!statusUser) {
+//             return res.status(400).json({ message: 'Please provide categoryId' });
+//           }
+
+//     let statusUser;
+//     if (status === 'false') { // Assuming status is a boolean represented as a string
+//       statusUser = true;
+//     } else if (status === 'true') {
+//       statusUser = false;
+//     } else {
+//       // If status is not a boolean string, it might be an ObjectId
+//       // Convert it to ObjectId
+//       statusUser = mongoose.Types.ObjectId(status);
+//     }
+
+//     // Now you can query the database using statusUser
+//     const user = await UserSelfie.findById(statusUser);
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+
+//     // Generate access and refresh tokens
+//     const userId = statusUser._id; // Get the user ID
+//     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(otpDoc._id, userId); // Pass userId to token generation function
+
+//     // Set options for cookies
+//     const options = {
+//       httpOnly: true,
+//       secure: true,
+//     };
+//     return res.status(200)
+//       .cookie("accessToken", accessToken, options)
+//       .cookie("refreshToken", refreshToken, options)
+//       .json({
+//         success: true,
+//         msg: "Otp verify successfully and Access Token and Refresh token created",
+//         accessToken,
+//         refreshToken,
+//         statusUser,
+//         userId // Include userId in the response
+//       });
+//   } catch (error) {
+//     // Handle any unexpected errors
+//     return res.status(500).json({
+//       success: false,
+//       msg: error.message,
+//     });
+//   }
+// };
 
 
 // const getAllMobileNumbers = async (req, res) => {

@@ -26,19 +26,6 @@ const uploadFile = (req, res) => {
   });
 };
 
-// const getImagesFromFolder = async (folderPath) => {
-//     try {
-//       console.log('Folder path:', folderPath);
-//       const files = await fs.promises.readdir(folderPath);
-//       console.log('Files:', files);
-//       return files;
-//     } catch (error) {
-//       console.error('Error reading folder:', error);
-//       throw new Error('Failed to read images from folder');
-//     }
-// };
-
 module.exports = {
     uploadFile,
-    // getImagesFromFolder
     };

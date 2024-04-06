@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Schema = mongoose.Schema;
 const subWineCategorySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,6 +17,12 @@ const subWineCategorySchema = new mongoose.Schema({
     type: String,
     required:true
   },
+  categoryID: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true
+  }
+
 });
 
 module.exports = mongoose.model('SubWineCategory', subWineCategorySchema);
