@@ -4,14 +4,17 @@ const {
     getCart,
     addToCart,
     updateCartItem,
-    deleteCartItem 
+    deleteCartItem,
+    deleteAllCartItems,
+    saveAllCartItems, // Import the new controller function
 } = require('../controllers/addToCartSubCategoriesController');
 
 // Define routes
-router.get('/get-card-item', getCart);
-router.post('/add-card-item',addToCart);
-router.put('/update-cart-item',updateCartItem );
-router.delete('/delete-cart-item',deleteCartItem );
-
+router.get('/get-add-cart', getCart);
+router.post('/add-to-cart', addToCart);
+router.put('/update-cart/:cartId', updateCartItem);
+router.delete('/delete-cart-item/:cartId', deleteCartItem);
+router.delete('/delete-all-cart-items', deleteAllCartItems); // Add the new route for deleting all cart items
+router.post('/save-all-cart-items', saveAllCartItems); // Add the new route for deleting all cart items
 
 module.exports = router;

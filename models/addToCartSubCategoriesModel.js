@@ -19,7 +19,7 @@ const addToCartSchema = new Schema({
         type:Number,
         require:true
     },
-    totalPrice:{
+    totalPrice:{ 
         type:Number,
         require:true
     },

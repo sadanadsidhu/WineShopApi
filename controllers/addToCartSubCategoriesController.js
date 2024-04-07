@@ -4,10 +4,10 @@ const AddToCart = require('../models//addToCartSubCategoriesModel');
 
 // const addToCart = async (req, res) => {
 //     try {
-//         const { quantity,totalPrice,ml,cart } = req.body;
+//         const { cart } = req.body;
 
 //         // Create a new document in the AddToCart collection
-//         const addToCartDoc = new AddToCart({ quantity,totalPrice,ml,cart });
+//         const addToCartDoc = new AddToCart({ cart });
 
 //         // Save the document to the database
 //         await addToCartDoc.save();
@@ -96,10 +96,51 @@ const deleteCartItem = async (req, res) => {
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
 };
+const deleteAllCartItems = async (req, res) => {
+    try {
+        // Delete all documents from the AddToCart collection
+        const deleteResult = await AddToCart.deleteMany({});
 
-module.exports={
-     getCart,
-     addToCart,
-     updateCartItem ,
-     deleteCartItem 
- };
+        // Check if any documents were deleted
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).json({ code: 404, message: 'No cart items found to delete' });
+        }
+
+        // Return success response
+        return res.status(200).json({ code: 200, message: 'All cart items deleted successfully' });
+    } catch (error) {
+        return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
+    }
+};
+
+const saveAllCartItems = async (req, res) => {
+    try {
+        const { cartData } = req.body;
+
+        // Check if cartData is provided
+        if (!cartData || cartData.length === 0) {
+            return res.status(400).json({ code: 400, message: 'No cart data provided' });
+        }
+
+        // Save each cart item in the database
+        const savedItems = "";
+        for (const item of cartData) {
+            const savedItem = await addToCart(req, res); // Reusing the addToCart function
+            savedItems.push(savedItem);
+        }
+
+        // Return success response with saved items
+        return res.status(200).json({ code: 200, message: 'All cart items saved successfully', data: savedItems });
+    } catch (error) {
+        return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
+    }
+};
+module.exports = {
+    getCart,
+    addToCart,
+    updateCartItem,
+    deleteCartItem,
+    deleteAllCartItems,
+    saveAllCartItems 
+};
+

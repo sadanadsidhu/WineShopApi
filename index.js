@@ -29,6 +29,7 @@ app.use('/', require("./routes/selfieImagesWithStatusRoutes"));
 app.use('/', require("./routes/wineSubCategoriesImagesRoutes"));
 app.use('/', require("./routes/wineSubCategoriesRoutes"));
 app.use('/', require("./routes/addToCartSubCategoriesRoutes"));
+app.use('/', require("./routes/allAddToCardSubCategoriesRoutes"));
 
 app.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`)
