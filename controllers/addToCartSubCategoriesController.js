@@ -2,18 +2,43 @@ const userModel = require('../models/userOtpVarificationModel');
 // const userModel = require('../models/wineSubCategoriesModel');
 const AddToCart = require('../models//addToCartSubCategoriesModel');
 
+// const addToCart = async (req, res) => {
+//     try {
+//         const { quantity,totalPrice,ml,cart } = req.body;
+
+//         // Create a new document in the AddToCart collection
+//         const addToCartDoc = new AddToCart({ quantity,totalPrice,ml,cart });
+
+//         // Save the document to the database
+//         await addToCartDoc.save();
+
+//         return res.status(200).json({ code: 200, message: 'Cart added successfully.', data: addToCartDoc });
+//     } catch (error) {
+//         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
+//     }
+// };
 const addToCart = async (req, res) => {
     try {
-        const { cart } = req.body;
+        // Destructure the request body to get the required data
+        const { quantity, totalPrice, ml, cart } = req.body;
 
-        // Create a new document in the AddToCart collection
-        const addToCartDoc = new AddToCart({ cart });
+        // Create a new document in the AddToCart collection with the provided data
+        const addToCartDoc = new AddToCart({ quantity, totalPrice, ml, cart });
 
         // Save the document to the database
         await addToCartDoc.save();
 
-        return res.status(200).json({ code: 200, message: 'Cart added successfully.', data: addToCartDoc });
+        // Fetch the saved document again to ensure all fields are included in the response
+        const savedDoc = await AddToCart.findById(addToCartDoc._id).select('quantity totalPrice ml cart');
+
+        // Return a success response with the saved document
+        return res.status(200).json({ 
+            code: 200, 
+            message: 'Cart added successfully.', 
+            data: savedDoc
+        });
     } catch (error) {
+        // Handle any errors that occur during the process
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
 };

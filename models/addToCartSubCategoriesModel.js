@@ -15,7 +15,19 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const addToCartSchema = new Schema({
-    cart: [{ type: Schema.Types.ObjectId, ref: 'SubWineCategory' }],
+    quantity:{
+        type:Number,
+        require:true
+    },
+    totalPrice:{
+        type:Number,
+        require:true
+    },
+    ml:{
+        type:Number,
+        require:false
+    },
+    cart: { type: Schema.Types.ObjectId, ref: 'SubWineCategory' },
     // roles: [{ type: String, ref: 'roles' }],
 });
 
