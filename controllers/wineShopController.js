@@ -3,13 +3,14 @@ const WineShop = require('../models/wineShopModel');
 // Create WineShop
 const createWineShop = async (req, res) => {
     try {
-        const { ShopName, latitude, longitude } = req.body;
+        const { ShopName, latitude, longitude,images } = req.body;
 
         // Create a new WineShop instance
         const newWineShop = new WineShop({
             ShopName,
             latitude,
-            longitude
+            longitude,
+            images
         });
 
         // Save the wine shop to the database
@@ -26,9 +27,9 @@ const createWineShop = async (req, res) => {
 const updateWineShop = async (req, res) => {
     try {
         const { id } = req.params;
-        const { ShopName, latitude, longitude } = req.body;
+        const { ShopName, latitude, longitude,images } = req.body;
 
-        const updatedWineShop = await WineShop.findByIdAndUpdate(id, { ShopName, latitude, longitude }, { new: true });
+        const updatedWineShop = await WineShop.findByIdAndUpdate(id, { ShopName, latitude, longitude,images }, { new: true });
 
         if (!updatedWineShop) {
             return res.status(404).json({ message: 'WineShop not found' });

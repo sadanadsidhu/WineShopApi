@@ -17,13 +17,63 @@ const AddToCart = require('../models//addToCartSubCategoriesModel');
 //         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
 //     }
 // };
+// const addToCart = async (req, res) => {
+//     try {
+//         // Destructure the request body to get the required data
+//         const { quantity, totalPrice, ml, cart } = req.body;
+
+//         // Create a new document in the AddToCart collection with the provided data
+//         const addToCartDoc = new AddToCart({ quantity, totalPrice, ml, cart });
+
+//         // Save the document to the database
+//         await addToCartDoc.save();
+
+//         // Fetch the saved document again to ensure all fields are included in the response
+//         const savedDoc = await AddToCart.findById(addToCartDoc._id).select('quantity totalPrice ml cart');
+
+//         // Return a success response with the saved document
+//         return res.status(200).json({ 
+//             code: 200, 
+//             message: 'Cart added successfully.', 
+//             data: savedDoc
+//         });
+//     } catch (error) {
+//         // Handle any errors that occur during the process
+//         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
+//     }
+// };
 const addToCart = async (req, res) => {
     try {
         // Destructure the request body to get the required data
-        const { quantity, totalPrice, ml, cart } = req.body;
+        const { quantity, ml, cart } = req.body;
+
+        // Get the price based on ml
+        let price;
+        switch (ml) {
+            case '180 ml':
+                price = 10; // Define your price for 180 ml
+                break;
+            case '375 ml':
+                price = 20; // Define your price for 375 ml
+                break;
+            case '750 ml':
+                price = 30; // Define your price for 750 ml
+                break;
+            case '1000 ml':
+                price = 40; // Define your price for 1000 ml
+                break;
+            case '1500 ml':
+                price = 50; // Define your price for 1500 ml
+                break;
+            default:
+                price = 0;
+        }
+
+        // Calculate the total price
+        const totalPrice = quantity * price;
 
         // Create a new document in the AddToCart collection with the provided data
-        const addToCartDoc = new AddToCart({ quantity, totalPrice, ml, cart });
+        const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart });
 
         // Save the document to the database
         await addToCartDoc.save();

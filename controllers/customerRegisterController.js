@@ -1,10 +1,11 @@
-const { response } = require('express');
 const Customer = require('../models/customberRegisterModel');
 
 
 const createUser = async (req, res) => {
+  console.log('createUser',req)
+  console.log('createUserresponse',res)
   try {
-    const { mobileNumber, username, email } = req.body;
+    const { mobileNumber, username, email,permanentAddress } = req.body;
 
     // Check if user with the provided username or email already exists
     const existingCustomer = await Customer.findOne({
@@ -21,6 +22,7 @@ const createUser = async (req, res) => {
       mobileNumber,
       username,
       email,
+      permanentAddress
     });
     return res.status(201).json(newCustomer);
   } catch (error) {
