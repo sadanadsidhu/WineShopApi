@@ -24,11 +24,11 @@ const addToCartSchema = new Schema({
         require:true
     },
     ml:{
-        type:Number,
-        require:false
+        type:String,
+        enum: ['180 ml', '375 ml', '750 ml', '1000 ml', '1500 ml'],
+        require:true
     },
     cart: { type: Schema.Types.ObjectId, ref: 'SubWineCategory' },
-    // roles: [{ type: String, ref: 'roles' }],
 });
 
 module.exports = mongoose.model('AddToCart', addToCartSchema);

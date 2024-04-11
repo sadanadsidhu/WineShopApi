@@ -1,6 +1,8 @@
 const SubWineCategory = require('../models/wineSubCategoriesModel');
 const getImages = require('../middleware/wineSubCategories');
 const Category = require('../models/winesCategoriesModel');
+const fs = require('fs').promises;
+const path = require('path');
 // Create SubWineCategory
 // const createSubWineCategory = async (req, res) => {
 //     try {
@@ -116,16 +118,69 @@ const deleteSubWineCategory = async (req, res) => {
     }
 };
 
+///////////////////delete all sub wine categories ------------------------->>>>>>>>>>>>>>>>>
+const deleteAllSubWineCategories = async (req, res) => {
+    try {
+        const deleteResult = await SubWineCategory.deleteMany({});
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).json({ message: 'No SubWineCategories found to delete' });
+        }
+        return res.status(200).json({ message: 'All SubWineCategories deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 ///////////////////get images------------------------------------------>>>>>>>>>>>>>>>>>>>>>>>
 const getImagesFromFolder = async (req, res) => {
     try {
-      const images = await getImages.getImagesFromFolder('./imageswinesubcategories');
-      res.status(200).json({ success: true, images });
+        const filename = req.params.filename;
+        const folderPath = './imageswinesubcategories';
+        
+        const imagePath = path.join(folderPath, filename);
+        
+        // Check if the file exists
+        try {
+            await fs.access(imagePath, fs.constants.R_OK);
+        } catch (error) {
+            res.status(404).json({ success: false, error: "Image not found" });
+            return;
+        }
+        
+        const rootPath = path.resolve('.');
+        const absoluteImagePath = path.join(rootPath, imagePath);
+        res.sendFile(absoluteImagePath);
     } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
   };
+
+  const getSubWineCategoriesByCategoryId = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+
+        // Check if categoryId is provided
+        if (!categoryId) {
+            return res.status(400).json({ message: 'Please provide categoryId' });
+        }
+
+        // Find SubWineCategories by categoryId
+        const subWineCategories = await SubWineCategory.find({ categoryID: categoryId });
+        
+        // Check if any SubWineCategories were found
+        if (subWineCategories.length === 0) {
+            return res.status(404).json({ message: 'No SubWineCategories found for the provided categoryId' });
+        }
+
+        // Return the SubWineCategories
+        res.status(200).json(subWineCategories);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
     
 module.exports = {
     createSubWineCategory,
@@ -133,5 +188,7 @@ module.exports = {
     getAllSubWineCategories,
     getSubWineCategoryById,
     deleteSubWineCategory,
-    getImagesFromFolder
+    getImagesFromFolder,
+    deleteAllSubWineCategories,
+    getSubWineCategoriesByCategoryId
 };

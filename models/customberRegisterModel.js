@@ -1,5 +1,31 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema; // Import the Schema object
+const Schema = mongoose.Schema; 
+const addressSchema = new Schema({
+  houseFlatBlockNo: {
+    type: Number,
+    required: true,
+  },
+  apartmentRoadArea: {
+    type: String,
+    required: true,
+  },
+  pinCode: {
+    type: Number,
+    required: true, 
+  },
+  landmark: {
+    type: String,
+    required: true, 
+  },
+  lognitude: {
+    type: Number,
+    required: false, 
+  },
+  latitude: {
+    type: Number,
+    required: false, 
+  },
+});
 const CustomerSchema = new Schema({
   mobileNumber: {
     type: Number,
@@ -18,8 +44,8 @@ const CustomerSchema = new Schema({
     required: false,
   },
   permanentAddress: {
-    type: String,
-    required: false,
+    type: addressSchema,
+    required: true,
   },
 });
 
