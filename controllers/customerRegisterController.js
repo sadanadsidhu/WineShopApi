@@ -10,7 +10,6 @@ const createUser = async (req, res) => {
     const existingCustomer = await Customer.findOne({
       $or: [{ username }, { email }],
     });
-
     if (existingCustomer) {
       return res
         .status(400)
@@ -23,12 +22,7 @@ const createUser = async (req, res) => {
       username,
       email,
     });
-    const user = await Customer.findOne({
-      $or: [{ username }, { email }]
-    });
-    if (!user) {
-      return res.status(404).json({ error: "User doesn't exist" });
-    }
+    return res.status(201).json(newCustomer);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });

@@ -140,25 +140,25 @@ const sendOtp = async (req, res) => {
 
 const verifyOtp = async (req, res) => {
   try {
-    const { otp, mobileNumber,statusID } = req.body;
+    const { otp, mobileNumber } = req.body;
     const otpDoc = await OtpModel.findOne({ otp, mobileNumber }).exec();
 
-    if (!statusID ) {
-      return res.status(400).json({ message: 'Please provide categoryId' });
-    }
+    // if (!statusID ) {
+    //   return res.status(400).json({ message: 'Please provide statusID' });
+    // }
 
     // Check if the referenced category exists
-    let statusUser = await UserSelfie.findById(statusID );
-    if (!statusUser) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
+    // let statusUser = await UserSelfie.findById(statusID );
+    // if (!statusUser) {
+    //   return res.status(404).json({ message: 'Category not found' });
+    // }
     if (otpDoc) {
       const currentTime = new Date();
       if (currentTime > otpDoc.otpExpiration) {
         // Update statusUser
-        statusUser.status = !statusUser.status; // Toggle status
-        await statusUser.save();
-        const userId = statusUser._id;
+        // statusUser.status = !statusUser.status; // Toggle status
+        // await statusUser.save();
+        // const userId = statusUser._id;
         // Generate access and refresh tokens
         const { accessToken, refreshToken } = await generateAccessAndRefreshToken(otpDoc._id);
 
@@ -175,8 +175,8 @@ const verifyOtp = async (req, res) => {
             msg: "Otp verify successfully and Access Token and Refresh token created",
             accessToken,
             refreshToken,
-            statusUser,
-            userId
+            // statusUser,
+            // userId
           });
       } else {
         // OTP has expired

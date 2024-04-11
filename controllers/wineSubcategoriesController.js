@@ -126,6 +126,31 @@ const getImagesFromFolder = async (req, res) => {
       res.status(500).json({ success: false, error: error.message });
     }
   };
+
+  const getSubWineCategoriesByCategoryId = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+
+        // Check if categoryId is provided
+        if (!categoryId) {
+            return res.status(400).json({ message: 'Please provide categoryId' });
+        }
+
+        // Find SubWineCategories by categoryId
+        const subWineCategories = await SubWineCategory.find({ categoryID: categoryId });
+        
+        // Check if any SubWineCategories were found
+        if (subWineCategories.length === 0) {
+            return res.status(404).json({ message: 'No SubWineCategories found for the provided categoryId' });
+        }
+
+        // Return the SubWineCategories
+        res.status(200).json(subWineCategories);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
     
 module.exports = {
     createSubWineCategory,
@@ -133,5 +158,6 @@ module.exports = {
     getAllSubWineCategories,
     getSubWineCategoryById,
     deleteSubWineCategory,
-    getImagesFromFolder
+    getImagesFromFolder,
+    getSubWineCategoriesByCategoryId
 };

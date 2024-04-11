@@ -94,11 +94,11 @@ const otpSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    statusUser:{
-      type: Schema.Types.ObjectId,
-      ref: 'UserSelfie',
-      required:false,
-},
+//     statusUser:{
+//       type: Schema.Types.ObjectId,
+//       ref: 'UserSelfie',
+//       required:false,
+// },
 });
 
 otpSchema.methods.generateAccessToken = function () {
