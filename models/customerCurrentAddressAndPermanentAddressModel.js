@@ -17,6 +17,14 @@ const addressSchema = new Schema({
       type: String,
       required: true, 
     },
+    description:{
+      type: String,
+      required: true,
+    },
+    locationType:{
+      type: String,
+      required: true,
+    },
     lognitude: {
       type: Number,
       required: false, 

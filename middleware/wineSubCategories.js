@@ -1,6 +1,7 @@
 const multer = require('multer');
-const fs = require('fs');
+// const fs = require('fs');
 const path = require('path');
+const fs = require('fs').promises;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,6 +27,22 @@ const uploadFile = (req, res) => {
   });
 };
 
+const getImagesFromFolder = async (req, res) => {
+  try {
+    const { imageName } = req.params;
+    // You can perform additional validation or processing here if needed
+
+    // Send the requested image file
+    res.sendFile(path.join(__dirname, '..', 'imageswinesubcategories', imageName));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+ 
+
 module.exports = {
     uploadFile,
+    getImagesFromFolder,
     };
