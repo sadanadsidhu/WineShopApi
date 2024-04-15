@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
     getCart,
+    getTotalPriceByMl,
     addToCart,
     updateCartItem,
     deleteCartItem,
@@ -11,6 +12,7 @@ const {
 
 // Define routes
 router.get('/get-add-cart-all', getCart);
+router.get('/get-price-cart/:ml', getTotalPriceByMl);
 router.post('/add-to-cart', addToCart);
 router.put('/update-cart/:cartId', updateCartItem);
 router.delete('/delete-cart-item/:cartId', deleteCartItem);

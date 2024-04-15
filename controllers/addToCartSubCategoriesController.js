@@ -45,33 +45,7 @@ const AddToCart = require('../models//addToCartSubCategoriesModel');
 const addToCart = async (req, res) => {
     try {
         // Destructure the request body to get the required data
-        const { quantity, ml, cart } = req.body;
-
-        // Get the price based on ml
-        let price;
-        switch (ml) {
-            case '180 ml':
-                price = 10; // Define your price for 180 ml
-                break;
-            case '375 ml':
-                price = 20; // Define your price for 375 ml
-                break;
-            case '750 ml':
-                price = 30; // Define your price for 750 ml
-                break;
-            case '1000 ml':
-                price = 40; // Define your price for 1000 ml
-                break;
-            case '1500 ml':
-                price = 50; // Define your price for 1500 ml
-                break;
-            default:
-                price = 0;
-        }
-
-        // Calculate the total price
-        const totalPrice = quantity * price;
-
+        const { quantity, ml,totalPrice, cart } = req.body;
         // Create a new document in the AddToCart collection with the provided data
         const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart });
 
@@ -111,6 +85,27 @@ const getCart = async (req, res) => {
     }
 };
 
+//////////////////////////////get total price according to ml--------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>    
+const getTotalPriceByMl = async (req, res) => {
+    try {
+      const { ml } = req.params; // Assuming ml is part of the request parameters
+      
+      // Query the database to retrieve the totalPrice based on the provided ml value
+      const cartItem = await AddToCart.findOne({ ml });
+  
+      // If no cart item found for the provided ml, return null
+      if (!cartItem) {
+        return res.status(404).json({ error: "Cart item not found" });
+      }
+  
+      // Return the totalPrice associated with the provided ml
+      return res.json({ totalPrice: cartItem.totalPrice });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Error occurred while fetching totalPrice' });
+    }
+  };
+ /////////////////////////////////////---------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
 const updateCartItem = async (req, res) => {
     try {
         const { cartId } = req.params;
@@ -187,6 +182,7 @@ const saveAllCartItems = async (req, res) => {
 };
 module.exports = {
     getCart,
+    getTotalPriceByMl,
     addToCart,
     updateCartItem,
     deleteCartItem,

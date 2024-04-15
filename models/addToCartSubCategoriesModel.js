@@ -24,8 +24,8 @@ const addToCartSchema = new Schema({
         require:true
     },
     ml:{
-        type:String,
-        enum: ['180 ml', '375 ml', '750 ml', '1000 ml', '1500 ml'],
+        type:Number,
+        // enum: ['180 ml', '375 ml', '750 ml', '1000 ml', '1500 ml'],
         require:true
     },
     cart: { type: Schema.Types.ObjectId, ref: 'SubWineCategory' },

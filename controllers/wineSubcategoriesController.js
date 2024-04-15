@@ -1,8 +1,10 @@
 const SubWineCategory = require('../models/wineSubCategoriesModel');
 const getImages = require('../middleware/wineSubCategories');
 const Category = require('../models/winesCategoriesModel');
-const fs = require('fs').promises;
+const fs = require('fs');
 const path = require('path');
+// const fs = require('fs').promises;
+// const path = require('path');
 // Create SubWineCategory
 // const createSubWineCategory = async (req, res) => {
 //     try {
@@ -22,7 +24,7 @@ const path = require('path');
 // };
 const createSubWineCategory = async (req, res) => {
     try {
-        const { name, miligram, price, images, categoryId } = req.body;
+        const { name, miligram, price, images, subCategoryType,categoryId } = req.body;
         
         // Check if the ID of the referenced category is provided
         if (!categoryId) {
@@ -40,6 +42,7 @@ const createSubWineCategory = async (req, res) => {
             miligram,
             price,
             images,
+            subCategoryType,
             categoryID: categoryId // Set the reference to the Category document
         });
 
@@ -55,7 +58,7 @@ const createSubWineCategory = async (req, res) => {
 const updateSubWineCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, miligram, price, images } = req.body;
+        const { name, miligram, price,subCategoryType, images } = req.body;
         
         // Check if the ID is provided
         if (!id) {
@@ -63,7 +66,7 @@ const updateSubWineCategory = async (req, res) => {
         }
 
         // Find the SubWineCategory by ID and update it
-        const updatedSubWineCategory = await SubWineCategory.findByIdAndUpdate(id, { name, miligram, price, images }, { new: true });
+        const updatedSubWineCategory = await SubWineCategory.findByIdAndUpdate(id, { name, miligram, price,subCategoryType, images }, { new: true });
 
         // Check if SubWineCategory exists
         if (!updatedSubWineCategory) {
@@ -133,28 +136,6 @@ const deleteAllSubWineCategories = async (req, res) => {
 };
 
 ///////////////////get images------------------------------------------>>>>>>>>>>>>>>>>>>>>>>>
-const getImagesFromFolder = async (req, res) => {
-    try {
-        const filename = req.params.filename;
-        const folderPath = './imageswinesubcategories';
-        
-        const imagePath = path.join(folderPath, filename);
-        
-        // Check if the file exists
-        try {
-            await fs.access(imagePath, fs.constants.R_OK);
-        } catch (error) {
-            res.status(404).json({ success: false, error: "Image not found" });
-            return;
-        }
-        
-        const rootPath = path.resolve('.');
-        const absoluteImagePath = path.join(rootPath, imagePath);
-        res.sendFile(absoluteImagePath);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-  };
 
   const getSubWineCategoriesByCategoryId = async (req, res) => {
     try {
@@ -188,7 +169,6 @@ module.exports = {
     getAllSubWineCategories,
     getSubWineCategoryById,
     deleteSubWineCategory,
-    getImagesFromFolder,
     deleteAllSubWineCategories,
     getSubWineCategoriesByCategoryId
 };

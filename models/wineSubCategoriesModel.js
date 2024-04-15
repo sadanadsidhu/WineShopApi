@@ -13,6 +13,10 @@ const subWineCategorySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  subCategoryType:{
+     type:String,
+     required:true
+  },
   images: {
     type: String,
     required:true
