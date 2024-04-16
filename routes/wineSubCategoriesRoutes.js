@@ -23,8 +23,6 @@ router.delete('/wine-subcategories/:id', deleteSubWineCategory);
 router.delete('/delete-all-wine-subcategories', deleteAllSubWineCategories);
 router.get('/get-all-wine-subcategories-categories/:categoryId', getSubWineCategoriesByCategoryId);
 
-router.get('/get-price-cart/:miligram', getTotalPriceByMl);
-
-
+router.get('/get-price-cart/:id/:miligram', getTotalPriceByMl);
 module.exports = router;
 

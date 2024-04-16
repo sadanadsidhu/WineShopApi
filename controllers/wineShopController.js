@@ -4,7 +4,7 @@ const SubWineCategory=require('../models/wineSubCategoriesModel')
 // Create WineShop
 const createWineShop = async (req, res) => {
     try {
-        const { ShopName, latitude, longitude,images, } = req.body;
+        const { ShopName, latitude, longitude,images,availableCategory } = req.body;
 
         // Create a new WineShop instance
         const newWineShop = new WineShop({
