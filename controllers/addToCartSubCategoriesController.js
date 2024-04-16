@@ -86,43 +86,52 @@ const getCart = async (req, res) => {
 };
 
 //////////////////////////////get total price according to ml--------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>    
-const getTotalPriceByMl = async (req, res) => {
-    try {
-      const { ml } = req.params; // Assuming ml is part of the request parameters
+// const getTotalPriceByMl = async (req, res) => {
+//     try {
+//       const { ml } = req.params; // Assuming ml is part of the request parameters
       
-      // Query the database to retrieve the totalPrice based on the provided ml value
-      const cartItem = await AddToCart.findOne({ ml });
+//       // Query the database to retrieve the totalPrice based on the provided ml value
+//       const cartItem = await AddToCart.findOne({ ml });
   
-      // If no cart item found for the provided ml, return null
-      if (!cartItem) {
-        return res.status(404).json({ error: "Cart item not found" });
-      }
+//       // If no cart item found for the provided ml, return null
+//       if (!cartItem) {
+//         return res.status(404).json({ error: "Cart item not found" });
+//       }
   
-      // Return the totalPrice associated with the provided ml
-      return res.json({ totalPrice: cartItem.totalPrice });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Error occurred while fetching totalPrice' });
-    }
-  };
+//       // Return the totalPrice associated with the provided ml
+//       return res.json({ totalPrice: cartItem.totalPrice });
+//     } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ error: 'Error occurred while fetching totalPrice' });
+//     }
+//   };
  /////////////////////////////////////---------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
-const updateCartItem = async (req, res) => {
+ const updateCartItem = async (req, res) => {
     try {
-        const { cartId } = req.params;
-        const { cart } = req.body;
+        const { id } = req.params;
+        const { quantity, totalPrice, ml, cart } = req.body;
 
-        // Find the cart item by ID and update it
-        const updatedCartItem = await AddToCart.findByIdAndUpdate(cartId, { cart }, { new: true });
+        // Find the cart item by ID
+        const updatedCartItem = await AddToCart.findById(id);
 
         if (!updatedCartItem) {
             return res.status(404).json({ code: 404, message: 'Cart item not found' });
         }
 
+        // Update the cart item properties
+        updatedCartItem.quantity = quantity;
+        updatedCartItem.totalPrice = totalPrice;
+        updatedCartItem.ml = ml;
+        updatedCartItem.cart = cart;
+
+        // Save the updated cart item
+        await updatedCartItem.save();
+
         return res.status(200).json({ code: 200, message: 'Cart item updated successfully.', data: updatedCartItem });
     } catch (error) {
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
-};
+}
 
 // Delete cart item
 const deleteCartItem = async (req, res) => {
@@ -182,7 +191,7 @@ const saveAllCartItems = async (req, res) => {
 };
 module.exports = {
     getCart,
-    getTotalPriceByMl,
+    // getTotalPriceByMl,
     addToCart,
     updateCartItem,
     deleteCartItem,

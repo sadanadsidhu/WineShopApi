@@ -8,7 +8,9 @@ const {
     deleteSubWineCategory,
     // getImagesFromFolder,
     deleteAllSubWineCategories,
-    getSubWineCategoriesByCategoryId
+    getSubWineCategoriesByCategoryId,
+
+    getTotalPriceByMl,
 } = require('../controllers/wineSubcategoriesController');
 
 // Define routes
@@ -20,6 +22,9 @@ router.get('/wine-subcategories/:id', getSubWineCategoryById);
 router.delete('/wine-subcategories/:id', deleteSubWineCategory);
 router.delete('/delete-all-wine-subcategories', deleteAllSubWineCategories);
 router.get('/get-all-wine-subcategories-categories/:categoryId', getSubWineCategoriesByCategoryId);
+
+router.get('/get-price-cart/:miligram', getTotalPriceByMl);
+
 
 module.exports = router;
 

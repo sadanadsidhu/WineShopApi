@@ -80,6 +80,31 @@ const updateSubWineCategory = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+////////////////////////////////////////////////////////////
+const getTotalPriceByMl = async (req, res) => {
+    try {
+        const { id, miligram } = req.params;
+        
+        // Query the database to retrieve the SubWineCategory based on the provided id
+        const subWineCategory = await SubWineCategory.findById(id);
+  
+        // If no SubWineCategory found for the provided id, return error
+        if (!subWineCategory) {
+            return res.status(404).json({ error: "SubWineCategory not found" });
+        }
+
+        // If the miligram matches, return the price
+        if (subWineCategory.miligram === parseInt(miligram)) {
+            return res.json({ price: subWineCategory.price });
+        } else {
+            return res.status(404).json({ error: "Price not found for the provided miligram" });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Error occurred while fetching price' });
+    }
+};
 // Get all SubWineCategories
 const getAllSubWineCategories = async (req, res) => {
     try {
@@ -167,6 +192,7 @@ module.exports = {
     createSubWineCategory,
     updateSubWineCategory,
     getAllSubWineCategories,
+    getTotalPriceByMl,
     getSubWineCategoryById,
     deleteSubWineCategory,
     deleteAllSubWineCategories,
