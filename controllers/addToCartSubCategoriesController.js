@@ -86,25 +86,25 @@ const getCart = async (req, res) => {
 };
 
 //////////////////////////////get total price according to ml--------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>    
-const getTotalPriceByMl = async (req, res) => {
-    try {
-      const { ml } = req.params; // Assuming ml is part of the request parameters
+// const getTotalPriceByMl = async (req, res) => {
+//     try {
+//       const { ml } = req.params; // Assuming ml is part of the request parameters
       
-      // Query the database to retrieve the totalPrice based on the provided ml value
-      const cartItem = await AddToCart.findOne({ ml });
+//       // Query the database to retrieve the totalPrice based on the provided ml value
+//       const cartItem = await AddToCart.findOne({ ml });
   
-      // If no cart item found for the provided ml, return null
-      if (!cartItem) {
-        return res.status(404).json({ error: "Cart item not found" });
-      }
+//       // If no cart item found for the provided ml, return null
+//       if (!cartItem) {
+//         return res.status(404).json({ error: "Cart item not found" });
+//       }
   
-      // Return the totalPrice associated with the provided ml
-      return res.json({ totalPrice: cartItem.totalPrice });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Error occurred while fetching totalPrice' });
-    }
-  };
+//       // Return the totalPrice associated with the provided ml
+//       return res.json({ totalPrice: cartItem.totalPrice });
+//     } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ error: 'Error occurred while fetching totalPrice' });
+//     }
+//   };
  /////////////////////////////////////---------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
 const updateCartItem = async (req, res) => {
     try {
@@ -182,7 +182,7 @@ const saveAllCartItems = async (req, res) => {
 };
 module.exports = {
     getCart,
-    getTotalPriceByMl,
+    // getTotalPriceByMl,
     addToCart,
     updateCartItem,
     deleteCartItem,
