@@ -51,6 +51,7 @@ app.use('/', require("./routes/customerCurrentAddressAndPermanentAddressRoutes")
 app.use('/', require("./routes/uploadWineshopimagesRoutes"));
 app.use('/', require("./routes/paymentGetWayRoutes"));
 app.use('/', require("./routes/uploadSwiperImagesRoutes"));
+app.use('/', require("./routes/swiperImagesStoreRoutes"));
 
 
 app.listen(process.env.PORT, () =>

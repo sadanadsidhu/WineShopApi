@@ -78,6 +78,12 @@ const getCart = async (req, res) => {
             return res.status(404).json({ code: 404, message: 'Cart data not found' });
         }
 
+        const totalMl = cartData.reduce((total, item) => total + item.ml, 0);
+
+        // Check if the total sum exceeds 60000 grams (6 kg)
+        if (totalMl > 60000) {
+            return res.status(400).json({ code: 400, message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.', data: cartData });
+        }
         // Return the cart data in the response
         return res.status(200).json({ code: 200, message: 'Cart data retrieved successfully.', data: cartData });
     } catch (error) {
