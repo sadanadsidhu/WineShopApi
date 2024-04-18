@@ -4,10 +4,17 @@ const Customer=require('../models/customberRegisterModel')
 ////////////////////////// POST LOCAL ADDRESS ----------------------->>>>>>>>>>>>>>>>>>>>>>>
 const addLocalAddress = async (req, res) => {
     try {
-        const { localAddress,customerPermanentAddress} = req.body;
-        const addToCartDoc = new CustomerAddress({ localAddress,customerPermanentAddress });
+        const { localAddress,customerPermanentAddress,mobileNumber } = req.body;
+        const addToCartDoc = new CustomerAddress({ localAddress,customerPermanentAddress,mobileNumber });
         await addToCartDoc.save();
-        const savedDoc = await CustomerAddress.findById(addToCartDoc._id).select('quantity totalPrice ml cart');
+
+        const customer = await Customer.findOne({ mobileNumber });
+
+        // Check if a customer with the provided mobile number exists
+        if (!customer || customer.mobileNumber !== mobileNumber) {
+            return res.status(404).json({ code: 404, message: 'Customer not found or mobileNumber does not match' });
+        }
+        const savedDoc = await CustomerAddress.findById(addToCartDoc._id).select('quantity totalPrice ml cart mobileNumber ');
         return res.status(200).json({ 
             code: 200, 
             message: 'Address added successfully.', 
@@ -20,11 +27,9 @@ const addLocalAddress = async (req, res) => {
 //////////////////////////GET LOCAL ADDRESS-------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const getLocalAddress = async (req, res) => {
     try {
+        const { mobileNumber } = req.params;
         // const cartData = await CustomerAddress.find().populate('customerPermanentAddress');
-        const cartData = await CustomerAddress.find().populate({
-            path: 'customerPermanentAddress',
-            select: 'permanentAddress' // Specify the field to populate
-        });
+        const cartData = await CustomerAddress.find({mobileNumber}).populate('customerPermanentAddress');
         if (!cartData || cartData.length === 0) {
             return res.status(404).json({ code: 404, message: 'Customer Address not found' });
         }

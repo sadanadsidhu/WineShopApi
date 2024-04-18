@@ -52,6 +52,7 @@ app.use('/', require("./routes/uploadWineshopimagesRoutes"));
 app.use('/', require("./routes/paymentGetWayRoutes"));
 app.use('/', require("./routes/uploadSwiperImagesRoutes"));
 app.use('/', require("./routes/swiperImagesStoreRoutes"));
+app.use('/', require("./routes/allDataCustomerAndCategoryRoutes"));
 
 
 app.listen(process.env.PORT, () =>

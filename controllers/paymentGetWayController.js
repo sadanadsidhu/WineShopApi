@@ -1,6 +1,7 @@
 const instance=require('../index');
 const dotenv = require("dotenv").config();
 const crypto=require("crypto")
+const Payment=require("../models/paymentGetWayModel")
 
 const checkout = async (req, res) => {
     const options={
@@ -29,6 +30,17 @@ const paymentverification = async (req, res) => {
     console.log("sig received ", razorpay_signature);
     console.log("sig generated ", expectedSignature);
 
+
+    const isAuthentic=expectedSignature===razorpay_signature;
+
+    if(isAuthentic){
+
+        await Payment.create({
+        razorpay_order_id,
+        razorpay_payment_id, 
+        razorpay_signature
+    })
+    }
     if (razorpay_signature === expectedSignature) {
         res.redirect(
             `http://localhost:3000/paymentsuccess?refrence=${razorpay_payment_id}`

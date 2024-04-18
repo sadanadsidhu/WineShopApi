@@ -36,7 +36,10 @@ const addressSchema = new Schema({
   });
 
 const customerAddresssSchema = new Schema({
-    
+  mobileNumber :{
+    type:Number, 
+    required:true,
+},
     localAddress: {
         type: addressSchema,
         required: true,
