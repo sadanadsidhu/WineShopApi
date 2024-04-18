@@ -1,83 +1,67 @@
 const Otp = require('../models/userOtpVarificationModel');
 // const userModel = require('../models/wineSubCategoriesModel');
 const AddToCart = require('../models//addToCartSubCategoriesModel');
+const Customer=require('../models/customberRegisterModel')
+
 
 // const addToCart = async (req, res) => {
 //     try {
-//         const { cart } = req.body;
+//         const { quantity, ml,totalPrice, cart,mobileNumber } = req.body;
+//         const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart,mobileNumber });
 
-//         // Create a new document in the AddToCart collection
-//         const addToCartDoc = new AddToCart({ cart });
 
-//         // Save the document to the database
+//         // Find the customer using the retrieved mobile number
+//         const customer = await Customer.findOne({ mobileNumber });
+        
+//         // Check if a customer with the provided userId exists
+//         if (!customer || customer.mobileNumber !== mobileNumber) {
+//             return res.status(404).json({ code: 404, message: 'Customer not found or mobileNumber does not match' });
+//         }
+//         const savedDoc = await AddToCart.findById(addToCartDoc._id).select('quantity totalPrice ml cart mobileNumber');
 //         await addToCartDoc.save();
-
-//         return res.status(200).json({ code: 200, message: 'Cart added successfully.', data: addToCartDoc });
-//     } catch (error) {
-//         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
-//     }
-// };
-// const addToCart = async (req, res) => {
-//     try {
-//         // Destructure the request body to get the required data
-//         const { quantity, totalPrice, ml, cart } = req.body;
-
-//         // Create a new document in the AddToCart collection with the provided data
-//         const addToCartDoc = new AddToCart({ quantity, totalPrice, ml, cart });
-
-//         // Save the document to the database
-//         await addToCartDoc.save();
-
-//         // Fetch the saved document again to ensure all fields are included in the response
-//         const savedDoc = await AddToCart.findById(addToCartDoc._id).select('quantity totalPrice ml cart');
-
-//         // Return a success response with the saved document
 //         return res.status(200).json({ 
 //             code: 200, 
 //             message: 'Cart added successfully.', 
 //             data: savedDoc
-//         });
+//         }); 
 //     } catch (error) {
-//         // Handle any errors that occur during the process
 //         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
 //     }
 // };
+
+
 const addToCart = async (req, res) => {
     try {
-        // Destructure the request body to get the required data
-        const { quantity, ml,totalPrice, cart } = req.body;
-        // Create a new document in the AddToCart collection with the provided data
-        const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart });
-
-        const otpDoc = await Otp.findById(userMobileNumber); // Fetch the OTP document
-
-        if (!otpDoc) {
-            return res.status(404).json({ code: 404, message: 'Otp not found' });
-        }
+        const { quantity, ml, totalPrice, cart, mobileNumber } = req.body;
+        const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart, mobileNumber });
 
         // Save the document to the database
-        await addToCartDoc.save();
+        const savedDoc = await addToCartDoc.save();
 
-        // Fetch the saved document again to ensure all fields are included in the response
-        const savedDoc = await AddToCart.findById(addToCartDoc._id).select('quantity totalPrice ml cart userMobileNumber');
+        // Find the customer using the retrieved mobile number
+        const customer = await Customer.findOne({ mobileNumber });
 
-        // Return a success response with the saved document
-        return res.status(200).json({ 
-            code: 200, 
-            message: 'Cart added successfully.', 
+        // Check if a customer with the provided mobile number exists
+        if (!customer || customer.mobileNumber !== mobileNumber) {
+            return res.status(404).json({ code: 404, message: 'Customer not found or mobileNumber does not match' });
+        }
+
+        return res.status(200).json({
+            code: 200,
+            message: 'Cart added successfully.',
             data: savedDoc
         });
     } catch (error) {
-        // Handle any errors that occur during the process
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
 };
-
 //////////////////////////get add card -------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const getCart = async (req, res) => {
     try {
+        const { mobileNumber } = req.params;
         // Query the AddToCart collection to retrieve all documents
-        const cartData = await AddToCart.find().populate('cart');
+        // const cartData = await AddToCart.find().populate('cart');
+        const cartData = await AddToCart.find({ mobileNumber }).populate('cart');
 
         // Check if any data was found
         if (!cartData || cartData.length === 0) {

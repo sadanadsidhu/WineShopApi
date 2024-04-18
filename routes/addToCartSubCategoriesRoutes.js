@@ -10,7 +10,7 @@ const {
 } = require('../controllers/addToCartSubCategoriesController');
 
 // Define routes
-router.get('/get-add-cart-all', getCart);
+router.get('/get-add-cart-all/:mobileNumber', getCart);
 router.post('/add-to-cart', addToCart);
 router.put('/update-cart/:id', updateCartItem);
 router.delete('/delete-cart-item/:cartId', deleteCartItem);

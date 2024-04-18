@@ -29,10 +29,13 @@ const addToCartSchema = new Schema({
         require:true
     },
     cart: { 
-        type: Schema.Types.ObjectId,
-         ref: 'SubWineCategory', 
-         require:true
-         }
+        type: Schema.Types.ObjectId, 
+        ref: 'SubWineCategory' 
+    },
+    mobileNumber :{
+        type:Number, 
+        required:true,
+    }
 });
 
 module.exports = mongoose.model('AddToCart', addToCartSchema);

@@ -2,20 +2,20 @@ const Customer = require('../models/customberRegisterModel');
 
 
 const createUser = async (req, res) => {
-  console.log('createUser',req)
-  console.log('createUserresponse',res)
+  
   try {
     const { mobileNumber, username, email,permanentAddress } = req.body;
 
     // Check if user with the provided username or email already exists
-    const existingCustomer = await Customer.findOne({
-      $or: [{ username }, { email }],
-    });
-    if (existingCustomer) {
-      return res
-        .status(400)
-        .json({ error: "Username or email already exists" });
-    }
+    // const existingCustomer = await Customer.findOne({
+    //   $or: [{ username }, { email }],
+    // });
+
+    // if (existingCustomer) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: "Username or email already exists" });
+    // }
 
     // Create a new customer
     const newCustomer = await Customer.create({
