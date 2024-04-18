@@ -45,7 +45,7 @@ const CustomerSchema = new Schema({
   },
   permanentAddress: {
     type: addressSchema,
-    required: true,
+    required: false,
   },
 });
 

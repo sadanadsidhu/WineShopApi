@@ -7,7 +7,7 @@ const addLocalAddress = async (req, res) => {
         const { localAddress,customerPermanentAddress} = req.body;
         const addToCartDoc = new CustomerAddress({ localAddress,customerPermanentAddress });
         await addToCartDoc.save();
-        const savedDoc = await CustomerAddress.findById(addToCartDoc._id).select('quantity totalPrice ml cart');
+        const savedDoc = await CustomerAddress.findById(addToCartDoc._id).select('localAddress,customerPermanentAddress');
         return res.status(200).json({ 
             code: 200, 
             message: 'Address added successfully.', 
@@ -21,10 +21,7 @@ const addLocalAddress = async (req, res) => {
 const getLocalAddress = async (req, res) => {
     try {
         // const cartData = await CustomerAddress.find().populate('customerPermanentAddress');
-        const cartData = await CustomerAddress.find().populate({
-            path: 'customerPermanentAddress',
-            select: 'permanentAddress' // Specify the field to populate
-        });
+        const cartData = await CustomerAddress.find().populate('customerPermanentAddress')
         if (!cartData || cartData.length === 0) {
             return res.status(404).json({ code: 404, message: 'Customer Address not found' });
         }

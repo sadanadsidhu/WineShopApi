@@ -1,4 +1,4 @@
-const userModel = require('../models/userOtpVarificationModel');
+const Otp = require('../models/userOtpVarificationModel');
 // const userModel = require('../models/wineSubCategoriesModel');
 const AddToCart = require('../models//addToCartSubCategoriesModel');
 
@@ -49,11 +49,17 @@ const addToCart = async (req, res) => {
         // Create a new document in the AddToCart collection with the provided data
         const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart });
 
+        const otpDoc = await Otp.findById(userMobileNumber); // Fetch the OTP document
+
+        if (!otpDoc) {
+            return res.status(404).json({ code: 404, message: 'Otp not found' });
+        }
+
         // Save the document to the database
         await addToCartDoc.save();
 
         // Fetch the saved document again to ensure all fields are included in the response
-        const savedDoc = await AddToCart.findById(addToCartDoc._id).select('quantity totalPrice ml cart');
+        const savedDoc = await AddToCart.findById(addToCartDoc._id).select('quantity totalPrice ml cart userMobileNumber');
 
         // Return a success response with the saved document
         return res.status(200).json({ 
@@ -82,7 +88,7 @@ const getCart = async (req, res) => {
 
         // Check if the total sum exceeds 60000 grams (6 kg)
         if (totalMl > 60000) {
-            return res.status(400).json({ code: 400, message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.', data: cartData });
+            return res.status(200).json({ code: 400, message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.', data: cartData });
         }
         // Return the cart data in the response
         return res.status(200).json({ code: 200, message: 'Cart data retrieved successfully.', data: cartData });
