@@ -1,38 +1,38 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const allCustomerAndProductDetailsSchema = new Schema({
-totalPriceSum:{
+    totalPriceSum:{
         type:Number,
         require:true
     },
-deliveryCharges:{
+    deliveryCharges:{
         type:Number,
         require:true
     },
-serviceCharges:{
+    serviceCharges:{
         type:Number,
         require:true
     },
-grandTotalPrice:{
+    grandTotalPrice:{
         type:Number,
         require:true
     },
-customerAddress:{
-     type:Schema.Types.ObjectId,
-     ref: 'CustomerAddress',
-     required: true,
+    customerAddress:{
+        type:Schema.Types.ObjectId,
+        ref: 'CustomerAddress',
+        required: true,
     },
-productDetails:{
-    type: Schema.Types.ObjectId,
-    ref: 'AddToCart',
-    required: true
-},
- shopDetails:{
-  type:Schema.Types.ObjectId,
-  ref: 'WineShop',
-  required: true,
- },
+    productDetails:[{
+        type: Schema.Types.ObjectId,
+        ref: 'AddToCart',
+        required: true    
+    }],
+    shopDetails:[{
+        type:Schema.Types.ObjectId,
+        ref: 'WineShop',
+        required: true,
+    }],
 });
 
 module.exports = mongoose.model('AllCustomerAndProductDetails', allCustomerAndProductDetailsSchema);

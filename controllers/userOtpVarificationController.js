@@ -56,7 +56,7 @@ const sendOtp = async (req, res) => {
     }
 
     // Send OTP via API
-    const apiUrl = `https://bulksmsby.in/api/api.php?apikey=${process.env.BULKSMS_API_KEY}&to=${mobileNumber}&senderid=${process.env.BULKSMS_SENDER_ID}&msg=Thanks for payment Rs ${otp} for  - TDR SOFTWARE PVT LTD&templateID=${process.env.BULKSMS_TEMPLET_ID}`;
+    const apiUrl = `https://bulksmsby.in/api/api.php?apikey=${process.env.BULKSMS_API_KEY}&to=${mobileNumber}&senderid=${process.env.BULKSMS_SENDER_ID}&msg=Thanks for payment Rs ${otp} for - TDR SOFTWARE PVT LTD&templateID=${process.env.BULKSMS_TEMPLET_ID}`;
     const response = await axios.get(apiUrl);
     if (response.status === 200) {
       return res.status(200).json({
@@ -80,15 +80,12 @@ const verifyOtp = async (req, res) => {
   try {
     const { otp, mobileNumber } = req.body;
 
-    // Fetch status from UserSelfie model
     const userSelfie = await UserSelfie.findOne({ mobileNumber: mobileNumber });
-    // Set statusUser based on status from UserSelfie
-    const statusUser = userSelfie ? userSelfie.status : false;
+    const statusUser = userSelfie ? userSelfie.statuss : true;
 
     const otpDoc = await OtpModel.findOne({ otp, mobileNumber }).exec();
 
     if (!otpDoc) {
-      // Invalid OTP or mobile number
       return res.status(400).json({
         success: false,
         msg: 'Invalid OTP or mobile number.'
@@ -97,21 +94,16 @@ const verifyOtp = async (req, res) => {
 
     const currentTime = new Date();
     if (currentTime < otpDoc.otpExpiration) {
-      // OTP has expired
       return res.status(400).json({
         success: false,
         msg: "OTP has expired. Please request a new one.",
       });
     }
 
-    // Generate access and refresh tokens
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(otpDoc._id);
 
-    // Update statusUser in database
-    otpDoc.statusUser = statusUser;
-    await otpDoc.save();
-
-    // Set options for cookies
+    otpDoc.statusUser = true; // Set statusUser to true as OTP is verified
+    
     const options = {
       httpOnly: true,
       secure: true,
@@ -124,12 +116,10 @@ const verifyOtp = async (req, res) => {
         msg: "Otp verify successfully and Access Token and Refresh token created",
         accessToken,
         refreshToken,
-        statusUser,
-          _id: otpDoc._id
-        
+        statusUser,// Use updated status from UserSelfie
+        _id: otpDoc._id
       });
   } catch (error) {
-    // Handle any unexpected errors
     return res.status(500).json({
       success: false,
       msg: error.message,

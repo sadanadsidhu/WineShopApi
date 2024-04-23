@@ -31,15 +31,11 @@ const addressSchema = new Schema({
     },
     latitude: {
       type: Number,
-      required: false, 
+      required: false,     
     },
   });
 
 const customerAddresssSchema = new Schema({
-  mobileNumber :{
-    type:Number, 
-    required:true,
-},
     localAddress: {
         type: addressSchema,
         required: true,

@@ -4,17 +4,17 @@ const Customer=require('../models/customberRegisterModel')
 ////////////////////////// POST LOCAL ADDRESS ----------------------->>>>>>>>>>>>>>>>>>>>>>>
 const addLocalAddress = async (req, res) => {
     try {
-        const { localAddress,customerPermanentAddress,mobileNumber } = req.body;
-        const addToCartDoc = new CustomerAddress({ localAddress,customerPermanentAddress,mobileNumber });
+        const { localAddress,customerPermanentAddress } = req.body;
+        const addToCartDoc = new CustomerAddress({ localAddress,customerPermanentAddress });
         await addToCartDoc.save();
 
-        const customer = await Customer.findOne({ mobileNumber });
+        // const customer = await Customer.findOne({ mobileNumber });
 
         // Check if a customer with the provided mobile number exists
-        if (!customer || customer.mobileNumber !== mobileNumber) {
-            return res.status(404).json({ code: 404, message: 'Customer not found or mobileNumber does not match' });
-        }
-        const savedDoc = await CustomerAddress.findById(addToCartDoc._id).select('quantity totalPrice ml cart mobileNumber ');
+        // if (!customer || customer.mobileNumber !== mobileNumber) {
+        //     return res.status(404).json({ code: 404, message: 'Customer not found or mobileNumber does not match' });
+        // }
+        const savedDoc = await CustomerAddress.findById(addToCartDoc._id).select('quantity totalPrice ml cart');
         return res.status(200).json({ 
             code: 200, 
             message: 'Address added successfully.', 
