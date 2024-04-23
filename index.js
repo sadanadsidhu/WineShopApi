@@ -5,6 +5,10 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const Razorpay=require("razorpay");
 const cloudinary=require("cloudinary")
+const { createChangeStream, wss } = require("./utils/liveUpdateDataBase");
+const WebSocket = require("ws");
+
+
 
 const app = express();
 
@@ -53,8 +57,15 @@ app.use('/', require("./routes/paymentGetWayRoutes"));
 app.use('/', require("./routes/uploadSwiperImagesRoutes"));
 app.use('/', require("./routes/swiperImagesStoreRoutes"));
 app.use('/', require("./routes/allDataCustomerAndCategoryRoutes"));
+app.use('/', require("./routes/allCustomerAndProductDataRoutes"));
 
 
 app.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`)
 );
+
+
+createChangeStream().catch(console.error);
+wss.on("connection", (ws) => {
+  console.log("Client connected");
+});

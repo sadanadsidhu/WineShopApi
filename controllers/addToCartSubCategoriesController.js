@@ -32,19 +32,19 @@ const Customer=require('../models/customberRegisterModel')
 
 const addToCart = async (req, res) => {
     try {
-        const { quantity, ml, totalPrice, cart, mobileNumber } = req.body;
-        const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart, mobileNumber });
+        const { quantity, ml, totalPrice, cart } = req.body;
+        const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart});
 
         // Save the document to the database
         const savedDoc = await addToCartDoc.save();
 
         // Find the customer using the retrieved mobile number
-        const customer = await Customer.findOne({ mobileNumber });
+        // const customer = await Customer.findOne({ mobileNumber });
 
-        // Check if a customer with the provided mobile number exists
-        if (!customer || customer.mobileNumber !== mobileNumber) {
-            return res.status(404).json({ code: 404, message: 'Customer not found or mobileNumber does not match' });
-        }
+        // // Check if a customer with the provided mobile number exists
+        // if (!customer || customer.mobileNumber !== mobileNumber) {
+        //     return res.status(404).json({ code: 404, message: 'Customer not found or mobileNumber does not match' });
+        // }
 
         return res.status(200).json({
             code: 200,
@@ -58,10 +58,10 @@ const addToCart = async (req, res) => {
 //////////////////////////get add card -------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const getCart = async (req, res) => {
     try {
-        const { mobileNumber } = req.params;
+        // const { mobileNumber } = req.params;
         // Query the AddToCart collection to retrieve all documents
-        // const cartData = await AddToCart.find().populate('cart');
-        const cartData = await AddToCart.find({ mobileNumber }).populate('cart');
+        const cartData = await AddToCart.find().populate('cart');
+        // const cartData = await AddToCart.find({ mobileNumber }).populate('cart');
 
         // Check if any data was found
         if (!cartData || cartData.length === 0) {
@@ -104,11 +104,15 @@ const getCart = async (req, res) => {
  /////////////////////////////////////---------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
  const updateCartItem = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { cartId } = req.params;
         const { quantity, totalPrice, ml, cart } = req.body;
 
-        // Find the cart item by ID
-        const updatedCartItem = await AddToCart.findById(id);
+        // Find the cart item by ID and update it
+        const updatedCartItem = await AddToCart.findByIdAndUpdate(
+            cartId,
+            { quantity, totalPrice, ml, cart },
+            { new: true }
+        );
 
         if (!updatedCartItem) {
             return res.status(404).json({ code: 404, message: 'Cart item not found' });

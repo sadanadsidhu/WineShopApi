@@ -4,18 +4,24 @@ const crypto=require("crypto")
 const Payment=require("../models/paymentGetWayModel")
 
 const checkout = async (req, res) => {
-    const options={
-        amount:Number(req.body.amount*100),
-        currency:"INR",
-        
+    try {
+      const options = {
+        amount: Number(req.body.amount * 100),
+        currency: "INR",
+      };
+      const order = await instance.orders.create(options);
+  
+      res.status(200).json({
+        success: true,
+        order,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        msg: error.message,
+      });
     }
-    const order = await instance.orders.create(options);
- 
-    res.status(200).json({
-      success: true,
-      order,
-    }); // Closing parenthesis was missing here
-};
+  };
 //////////////////////////////
 const paymentverification = async (req, res) => {
     console.log(req.body);
