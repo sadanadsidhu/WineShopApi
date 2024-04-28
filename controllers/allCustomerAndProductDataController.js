@@ -28,16 +28,14 @@ const getAllCustomerAndProductData = async (req, res) => {
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
 }
+
 const getAllCustomerDataByShopId = async (req, res) => {
     const { shopId } = req.params;
-
     try {
         const data = await AllCustomerAndProductData.find({ 'dataArray.shopId': shopId });
-
         if (!data || data.length === 0) {
             return res.status(404).json({ message: 'Data not found' });
         }
-
         res.json(data);
     } catch (err) {
         console.error(err);

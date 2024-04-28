@@ -13,4 +13,4 @@ router.get('/get-shopId-customer-data-to-cart/:shopId', getAllCustomerDataByShop
 
 
 
-module.exports = router;  
+module.exports = router;   
