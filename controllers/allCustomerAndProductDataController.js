@@ -32,7 +32,7 @@ const getAllCustomerAndProductData = async (req, res) => {
 const getAllCustomerDataByShopId = async (req, res) => {
     const { shopId } = req.params;
     try {
-        const data = await AllCustomerAndProductData.find({ 'dataArray.shopId': shopId });
+        const data = await AllCustomerAndProductData.find({ 'dataArray.shopId': shopId }).populate('dataArray.productId dataArray.shopId');
         if (!data || data.length === 0) {
             return res.status(404).json({ message: 'Data not found' });
         }
