@@ -81,7 +81,7 @@ const verifyOtp = async (req, res) => {
     const { otp, mobileNumber } = req.body;
 
     const userSelfie = await UserSelfie.findOne({ mobileNumber: mobileNumber });
-    const statusUser = userSelfie ? userSelfie.statuss : true;
+    const statusUser = userSelfie ? userSelfie.status : false;
 
     const otpDoc = await OtpModel.findOne({ otp, mobileNumber }).exec();
 

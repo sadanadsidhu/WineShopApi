@@ -114,7 +114,13 @@ const getAllDataCustomerAndProduct = async (req, res) => {
         const allData = await AllCustomerAndProductDetails.find()
             // .populate('customerAddress.localAddress')
             .populate('customerAddress')
-            .populate( 'productDetails')
+            .populate({
+                path: 'productDetails',
+                populate: {
+                    path: 'cart',
+                    
+                }
+            })
             .populate({
                 path: 'shopDetails',
                 populate: {
@@ -127,6 +133,7 @@ const getAllDataCustomerAndProduct = async (req, res) => {
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
 };
+
 
 // UPDATE data
 const updateDataCustomerAndProduct = async (req, res) => {

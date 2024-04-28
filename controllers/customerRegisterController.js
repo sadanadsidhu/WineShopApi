@@ -2,20 +2,8 @@ const Customer = require('../models/customberRegisterModel');
 
 
 const createUser = async (req, res) => {
-  
   try {
-    const { mobileNumber, username, email,permanentAddress } = req.body;
-
-    // Check if user with the provided username or email already exists
-    // const existingCustomer = await Customer.findOne({
-    //   $or: [{ username }, { email }],
-    // });
-
-    // if (existingCustomer) {
-    //   return res
-    //     .status(400)
-    //     .json({ error: "Username or email already exists" });
-    // }
+    const { mobileNumber, username, email, permanentAddress } = req.body;
 
     // Create a new customer
     const newCustomer = await Customer.create({
@@ -24,17 +12,19 @@ const createUser = async (req, res) => {
       email,
       permanentAddress
     });
-    const user = await Customer.findOne({
-      $or: [{ username }, { email }]
-    });
-    if (!user) {
-      return res.status(404).json({ error: "User doesn't exist" });
+
+    // Check if newCustomer is successfully created
+    if (!newCustomer) {
+      return res.status(404).json({ error: "Failed to create user" });
     }
+
+    return res.status(201).json({ message: "User created successfully", data: newCustomer });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 //////////////////////////---------login
 const loginUser = async (req, res) => {

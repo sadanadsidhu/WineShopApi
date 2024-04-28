@@ -33,11 +33,35 @@ const Customer=require('../models/customberRegisterModel')
 const addToCart = async (req, res) => {
     try {
         const { quantity, ml, totalPrice, cart } = req.body;
+
+        const existingCartItem = await AddToCart.findOne({ quantity, ml, totalPrice, cart });
+
+        // If the item already exists, return a message
+        if (existingCartItem) {
+            return res.status(400).json({
+                code: 400,
+                message: 'This item is already in the cart.'
+            });
+        }
+         // Calculate total milliliters
+         const totalMlInCart = await totalMl();
+
+         // Calculate total milliliters for the new item being added
+         const totalMlForNewItem = quantity * ml;
+ 
+         // Check if adding the new item will exceed the limit
+         if (totalMlInCart + totalMlForNewItem > 60000) {
+             return res.status(400).json({
+                 code: 400,
+                 message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.'
+             });
+         }
+
         const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart});
 
         // Save the document to the database
         const savedDoc = await addToCartDoc.save();
-
+         
         // Find the customer using the retrieved mobile number
         // const customer = await Customer.findOne({ mobileNumber });
 
@@ -60,7 +84,8 @@ const getCart = async (req, res) => {
     try {
         // const { mobileNumber } = req.params;
         // Query the AddToCart collection to retrieve all documents
-        const cartData = await AddToCart.find().populate('cart');
+        // const cartData = await AddToCart.find().populate('cart');
+        const cartData = await AddToCart.find({ deleted: { $ne: true } }).populate('cart');
         // const cartData = await AddToCart.find({ mobileNumber }).populate('cart');
 
         // Check if any data was found
@@ -68,12 +93,12 @@ const getCart = async (req, res) => {
             return res.status(404).json({ code: 404, message: 'Cart data not found' });
         }
 
-        const totalMl = cartData.reduce((total, item) => total + item.ml, 0);
+        // const totalMl = cartData.reduce((total, item) => total + item.ml, 0);
 
-        // Check if the total sum exceeds 60000 grams (6 kg)
-        if (totalMl > 60000) {
-            return res.status(400).json({ code: 400, message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.', data: cartData });
-        }
+        // // Check if the total sum exceeds 60000 grams (6 kg)
+        // if (totalMl < 6000) {
+        //     return res.status(400).json({ code: 400, message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.', data: cartData });
+        // }
         // Return the cart data in the response
         return res.status(200).json({ code: 200, message: 'Cart data retrieved successfully.', data: cartData });
     } catch (error) {
@@ -125,22 +150,7 @@ const getCart = async (req, res) => {
 };
 
 // Delete cart item
-const deleteCartItem = async (req, res) => {
-    try {
-        const { cartId } = req.params;
 
-        // Find the cart item by ID and delete it
-        const deletedCartItem = await AddToCart.findByIdAndDelete(cartId);
-
-        if (!deletedCartItem) {
-            return res.status(404).json({ code: 404, message: 'Cart item not found' });
-        }
-
-        return res.status(200).json({ code: 200, message: 'Cart item deleted successfully.', data: deletedCartItem });
-    } catch (error) {
-        return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
-    }
-};
 const deleteAllCartItems = async (req, res) => {
     try {
         // Delete all documents from the AddToCart collection
@@ -153,6 +163,22 @@ const deleteAllCartItems = async (req, res) => {
 
         // Return success response
         return res.status(200).json({ code: 200, message: 'All cart items deleted successfully' });
+    } catch (error) {
+        return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
+    }
+};
+
+//////////////////hideen cart items
+const deleteCartItem = async (req, res) => {
+    try {
+        // Update all cart items to mark them as deleted
+        const deletedCartItems = await AddToCart.updateMany({}, { deleted: true }, { new: true });
+
+        if (!deletedCartItems) {
+            return res.status(404).json({ code: 404, message: 'Cart items not found' });
+        }
+
+        return res.status(200).json({ code: 200, message: 'All cart items hidden successfully.', data: deletedCartItems });
     } catch (error) {
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
@@ -180,6 +206,8 @@ const saveAllCartItems = async (req, res) => {
         return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
     }
 };
+
+
 module.exports = {
     getCart,
     // getTotalPriceByMl,

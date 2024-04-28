@@ -7,7 +7,7 @@ const selfieSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    statuss: {
+    status: {
         type: Boolean,
         default: false
     },

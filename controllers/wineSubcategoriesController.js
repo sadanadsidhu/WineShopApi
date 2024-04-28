@@ -1,34 +1,20 @@
 const SubWineCategory = require('../models/wineSubCategoriesModel');
 const getImages = require('../middleware/wineSubCategories');
 const Category = require('../models/winesCategoriesModel');
-const fs = require('fs');
-const path = require('path');
-// const fs = require('fs').promises;
-// const path = require('path');
-// Create SubWineCategory
-// const createSubWineCategory = async (req, res) => {
-//     try {
-//         const { name, miligram, price, images } = req.body;
-//         const newSubWineCategory = new SubWineCategory({
-//             name,
-//             miligram,
-//             price,
-//             images
-//         });
-//         const savedSubWineCategory = await newSubWineCategory.save();
-//         res.status(201).json(savedSubWineCategory);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// };
+
+
 const createSubWineCategory = async (req, res) => {
     try {
-        const { name, miligram, price, images, subCategoryType,categoryId } = req.body;
+        const { name, miligram, price, images, subCategoryType, categoryId } = req.body;
         
         // Check if the ID of the referenced category is provided
         if (!categoryId) {
             return res.status(400).json({ message: 'Please provide categoryId' });
+        }
+
+        // Check if the ID of the referenced WineShop is provided
+        if (!wineShopId) {
+            return res.status(400).json({ message: 'Please provide wineShopId' });
         }
 
         // Check if the referenced category exists
@@ -37,13 +23,20 @@ const createSubWineCategory = async (req, res) => {
             return res.status(404).json({ message: 'Category not found' });
         }
 
+        // Check if the referenced WineShop exists
+        // const wineShop = await WineShop.findById(wineShopId);
+        // if (!wineShop) {
+        //     return res.status(404).json({ message: 'WineShop not found' });
+        // }
+
         const newSubWineCategory = new SubWineCategory({
             name,
             miligram,
             price,
             images,
             subCategoryType,
-            categoryID: categoryId // Set the reference to the Category document
+            categoryID: categoryId, // Set the reference to the Category document
+            // wineShopID: wineShopId // Set the reference to the WineShop document
         });
 
         const savedSubWineCategory = await newSubWineCategory.save();
@@ -81,15 +74,28 @@ const updateSubWineCategory = async (req, res) => {
     }
 };
 // Get all SubWineCategories
+// const getAllSubWineCategories = async (req, res) => {
+//     try {
+//         const subWineCategories = await SubWineCategory.find();
+//         res.status(200).json(subWineCategories);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// };
+
 const getAllSubWineCategories = async (req, res) => {
     try {
-        const subWineCategories = await SubWineCategory.find();
+        const subWineCategories = await SubWineCategory.find()
+            .populate('categoryID')
+            .populate('wineShopID');
         res.status(200).json(subWineCategories);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
 
 // Get SubWineCategory by ID
 const getSubWineCategoryById = async (req, res) => {

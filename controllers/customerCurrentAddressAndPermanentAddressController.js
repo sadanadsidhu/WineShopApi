@@ -27,9 +27,8 @@ const addLocalAddress = async (req, res) => {
 //////////////////////////GET LOCAL ADDRESS-------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const getLocalAddress = async (req, res) => {
     try {
-        const { mobileNumber } = req.params;
-        // const cartData = await CustomerAddress.find().populate('customerPermanentAddress');
-        const cartData = await CustomerAddress.find({mobileNumber}).populate('customerPermanentAddress');
+        const cartData = await CustomerAddress.find().populate('customerPermanentAddress');
+        // const cartData = await CustomerAddress.find({mobileNumber}).populate('customerPermanentAddress');
         if (!cartData || cartData.length === 0) {
             return res.status(404).json({ code: 404, message: 'Customer Address not found' });
         }
