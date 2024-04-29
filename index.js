@@ -58,6 +58,7 @@ app.use('/', require("./routes/uploadSwiperImagesRoutes"));
 app.use('/', require("./routes/swiperImagesStoreRoutes"));
 app.use('/', require("./routes/allDataCustomerAndCategoryRoutes"));
 app.use('/', require("./routes/allCustomerAndProductDataRoutes"));
+app.use('/', require("./routes/acceptAndDeclineArrayRoutes"));
 
 
 app.listen(process.env.PORT, () =>

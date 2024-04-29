@@ -43,10 +43,35 @@ const getAllCustomerDataByShopId = async (req, res) => {
     }
 };
 
+const deleteAllCustomerAndProductData = async (req, res) => {
+    try {
+        // Delete all documents from the collection
+        await AllCustomerAndProductData.deleteMany({});
+        res.status(200).json({ success: true, message: 'All data deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+};
+
+const deleteCustomerAndProductDataById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Delete document by ID
+        const deletedData = await AllCustomerAndProductData.findByIdAndDelete(id);
+        if (!deletedData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+        res.status(200).json({ success: true, message: 'Data deleted successfully', data: deletedData });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+};
 
 module.exports = {
     createAllCustomerAndProductData,
     getAllCustomerAndProductData,
-    getAllCustomerDataByShopId
+    getAllCustomerDataByShopId,
+    deleteAllCustomerAndProductData,
+    deleteCustomerAndProductDataById
 };
 
