@@ -1,4 +1,5 @@
 const AcceptAndDeclineOrder = require('../models/acceptAndDeclineArrayModel');
+const AllCustomerAndProductData = require('../models/allCustomerAndProductDataModel');
 
 //////////////////////////////Add Accept order //////////////////////////////////////////////////
 const addAcceptOrder = async (req, res) => {
@@ -45,9 +46,15 @@ const addDeclineOrder = async (req, res) => {
 };
 ////////////////////////get AcceptOrder///////////////////////////////////////////////////
 const getAcceptOrders = async (req, res) => {
+    const { shopId } = req.params;
     try {
         const orders = await AcceptAndDeclineOrder.find().populate('acceptOrder');
-        res.json(orders);
+        const data = await AllCustomerAndProductData.find({ 'dataArray.shopId': shopId });
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+        const responseData = { data: data, orders: orders }; // Combine data and orders into a single object
+        res.json(responseData);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });

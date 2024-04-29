@@ -11,7 +11,7 @@ const {
 // Define routes
 router.post('/add-accept-order-array', addAcceptOrder);
 router.post('/add-decline-order-array', addDeclineOrder);
-router.get('/get-accept-order-array', getAcceptOrders);
+router.get('/get-accept-order-array/:shopId', getAcceptOrders);
 router.get('/get-decline-order-array', getDeclineOrders);
 
 
