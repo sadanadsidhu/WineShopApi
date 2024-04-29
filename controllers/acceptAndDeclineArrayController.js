@@ -63,9 +63,15 @@ const getAcceptOrders = async (req, res) => {
 
 ////////////////////////////get decline order ////////////////////////////////////////////////////
 const getDeclineOrders = async (req, res) => {
+    const { shopId } = req.params;
     try {
+        const data = await AllCustomerAndProductData.find({ 'dataArray.shopId': shopId });
         const orders = await AcceptAndDeclineOrder.find().populate('declineOrder');
-        res.json(orders);
+        if (!data || data.length === 0) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+        const responseData = { data: data, orders: orders }; // Combine data and orders into a single object
+        res.json(responseData);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
