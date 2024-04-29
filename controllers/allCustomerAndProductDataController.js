@@ -24,12 +24,15 @@ io.on('connection', (socket) => {
     });
 });
 
+
 const createAllCustomerAndProductData = async (req, res) => {
     try {
         const requestData = req.body;
         const createdData = await AllCustomerAndProductData.create({ dataArray: requestData });
         io.emit('dataCreated'); // Emit event when data is created
-        res.status(201).json({ success: true, message: 'Data created successfully', data: createdData });
+        res.status(201).json({ success: true, message: 'Data created successfully',
+         data: createdData,
+         });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
