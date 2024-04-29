@@ -1,11 +1,34 @@
 const AllCustomerAndProductData = require('../models/allCustomerAndProductDataModel');
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
+const socketIo = require('socket.io');
+const express = require('express');
+
+const app = express();
+const server = require('http').createServer(app);
+const io = socketIo(server);
+
+app.use(express.json());
+
+// WebSocket server logic
+io.on('connection', (socket) => {
+    console.log('Client connected');
+
+    // Example: Listen for data creation event
+    socket.on('dataCreated', () => {
+        io.emit('newData'); // Emit event to all connected clients
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
 
 const createAllCustomerAndProductData = async (req, res) => {
     try {
         const requestData = req.body;
         const createdData = await AllCustomerAndProductData.create({ dataArray: requestData });
+        io.emit('dataCreated'); // Emit event when data is created
         res.status(201).json({ success: true, message: 'Data created successfully', data: createdData });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });

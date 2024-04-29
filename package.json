@@ -33,6 +33,7 @@
     "otp-generator": "^4.0.1",
     "razorpay": "^2.9.3",
     "react-native-webview": "^13.8.4",
+    "socket.io": "^4.7.5",
     "twilio": "^4.23.0",
     "ws": "^8.16.0"
   },
