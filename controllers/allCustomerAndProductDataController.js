@@ -16,8 +16,8 @@ io.on('connection', (socket) => {
 
     // Example: Listen for data creation event
     socket.on('dataCreated', () => {
-        io.emit('newData'); // Emit event to all connected clients
-    });
+        // io.emit('newData'); // Emit event to all connected clients
+        io.emit('newData', { message: 'New data created', timestamp: Date.now() }); });
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');
@@ -80,10 +80,10 @@ const deleteAllCustomerAndProductData = async (req, res) => {
 };
 
 const deleteCustomerAndProductDataById = async (req, res) => {
-    const { productId } = req.params;
+    const { _id } = req.params;
     try {
         // Delete document by matching the productId within the dataArray
-        const deletedData = await AllCustomerAndProductData.findOneAndDelete({ 'dataArray.productId': productId });
+        const deletedData = await AllCustomerAndProductData.findOneAndDelete({ 'dataArray.productId': _id });
         if (!deletedData) {
             return res.status(404).json({ message: 'Data not found' });
         }

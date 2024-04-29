@@ -40,7 +40,25 @@ const getAcceptOrders = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
-
+// const getAcceptOrders = async (req, res) => {
+//     const { shopId } = req.params;
+//     try {
+//         // Find orders based on the shopId and populate the acceptOrder field with only the quantity
+//         const orders = await AcceptAndDeclineOrder.find({ shopId: shopId }).populate({
+//             path: 'acceptOrder',
+//             populate: { path: 'dataArray', select: 'quantity' } // Select only the quantity field
+//         });
+        
+//         if (!orders || orders.length === 0) {
+//             return res.status(404).json({ message: 'Data not found' });
+//         }
+        
+//         res.json({ orders: orders });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Server Error' });
+//     }
+// };
 
 
 module.exports={

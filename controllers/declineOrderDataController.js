@@ -1,22 +1,20 @@
-const DeclineOrder=require("../models/declineOrderDataModel")
+const DeclineOrder = require("../models/declineOrderDataModel");
 
-
+// Function to add a decline order
 const addDeclineOrder = async (req, res) => {
     try {
-        const { declineOrderId,shopId } = req.body;
+        const { declineOrderId, shopId } = req.body; // Use "declineOrderId" instead of "acceptOrderId"
 
-        // Create a new AcceptAndDeclineOrder document with the decline order
-        const newAcceptAndDeclineOrder = new DeclineOrder({
-            declineOrder: declineOrderId,
-            shopId:shopId
+        // Create a new DeclineOrder document with the decline order
+        const newDeclineOrder = new DeclineOrder({
+            declineOrder: declineOrderId, // Use "declineOrderId"
+            shopId: shopId
         });
 
         // Save the new document to the database
-        await newAcceptAndDeclineOrder.save();
+        await newDeclineOrder.save();
 
-        res.status(201).json({ message: 'Decline order added successfully',
-        declineOrder: declineOrderId
-    });
+        res.status(201).json({ message: 'Decline order added successfully', declineOrder: declineOrderId });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
@@ -24,10 +22,11 @@ const addDeclineOrder = async (req, res) => {
 };
 
 
-const getAcceptOrders = async (req, res) => {
+// Function to get decline orders for a specific shopId
+const getDeclineOrders = async (req, res) => {
     const { shopId } = req.params;
     try {
-        // Find orders based on the shopId
+        // Find decline orders based on the shopId and populate the 'declineOrder' field
         const orders = await DeclineOrder.find({ shopId: shopId }).populate('declineOrder');
         if (!orders || orders.length === 0) {
             return res.status(404).json({ message: 'Data not found' });
@@ -39,7 +38,7 @@ const getAcceptOrders = async (req, res) => {
     }
 };
 
-module.exports={
+module.exports = {
     addDeclineOrder,
-    getAcceptOrders
-}
+    getDeclineOrders
+};

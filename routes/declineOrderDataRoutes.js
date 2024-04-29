@@ -3,14 +3,14 @@ const router = express.Router();
 const {
     
     addDeclineOrder,
-    getAcceptOrders,
+    getDeclineOrders,
     
 
 } = require('../controllers/declineOrderDataController');
 
 // Define routes
 router.post('/add-decline-order-array', addDeclineOrder);
-router.get('/get-accept-order-array/:shopId', getAcceptOrders);
+router.get('/get-decline-order-array/:shopId', getDeclineOrders);
 
 
 module.exports = router;

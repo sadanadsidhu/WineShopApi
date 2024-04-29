@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const allAcceptAndDeclineOrderSchema = new mongoose.Schema({
     
-       acceptOrder : [{
+       acceptOrder : {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'SubWineCategory',
                 required: true
-            }],
+            },
             shopId:{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'WineShop',
