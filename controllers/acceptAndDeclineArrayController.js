@@ -35,37 +35,24 @@ const addDeclineOrder = async (req, res) => {
         // Save the new document to the database
         await newAcceptAndDeclineOrder.save();
 
-        res.status(201).json({ message: 'Decline order added successfully' });
+        res.status(201).json({ message: 'Decline order added successfully',
+        declineOrder: declineOrderId
+    });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
 };
 ////////////////////////get AcceptOrder///////////////////////////////////////////////////
-// const getAcceptOrders = async (req, res) => {
-//     try {
-//         const orders = await AcceptAndDeclineOrder.find().populate('acceptOrder');
-//         res.json(orders);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: 'Server Error' });
-//     }
-// };
-
 const getAcceptOrders = async (req, res) => {
     try {
-        const orders = await AcceptAndDeclineOrder.find().populate({
-            path: 'acceptOrder', // Specify the field containing the references
-            model: 'AcceptAndDeclineOrder' // Specify the model to use for population
-        }).exec();
-
+        const orders = await AcceptAndDeclineOrder.find().populate('acceptOrder');
         res.json(orders);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
 };
-
 
 ////////////////////////////get decline order ////////////////////////////////////////////////////
 const getDeclineOrders = async (req, res) => {

@@ -4,13 +4,13 @@ const allAcceptAndDeclineOrderSchema = new mongoose.Schema({
     
     acceptOrder : [{
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'AllCustomerAndProductData',
+                ref: 'SubWineCategory',
                 required: true
             }],
 
-    declineOrderId: [{
+    declineOrder: [{
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'AllCustomerAndProductData',
+                ref: 'SubWineCategory',
                 required: true
             }]
    
