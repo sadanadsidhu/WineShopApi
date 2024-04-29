@@ -12,7 +12,7 @@ const {
 router.post('/add-accept-order-array', addAcceptOrder);
 router.post('/add-decline-order-array', addDeclineOrder);
 router.get('/get-accept-order-array/:shopId', getAcceptOrders);
-router.get('/get-decline-order-array', getDeclineOrders);
+router.get('/get-decline-order-array/:shopId', getDeclineOrders);
 
 
 module.exports = router;
