@@ -2,18 +2,16 @@ const mongoose = require('mongoose');
 
 const allAcceptAndDeclineOrderSchema = new mongoose.Schema({
     
-    acceptOrder : [{
+       acceptOrder : [{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'SubWineCategory',
                 required: true
             }],
-
-    declineOrder: [{
+            shopId:{
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'SubWineCategory',
-                required: true
-            }]
-   
+                ref: 'WineShop',
+                required: true,
+            }
 });
 
 module.exports = mongoose.model('AcceptAndDeclineOrder', allAcceptAndDeclineOrderSchema);
