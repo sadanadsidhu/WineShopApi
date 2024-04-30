@@ -79,28 +79,11 @@ const deleteAllCustomerAndProductData = async (req, res) => {
     }
 };
 
-// const deleteCustomerAndProductDataById = async (req, res) => {
-//     const {  arrayId } = req.params;
-//     try {
-//         // Delete document by matching the productId within the dataArray
-//         const deletedData = await AllCustomerAndProductData.findOneAndDelete({ "dataArray.productId": arrayId});
-//         if (!deletedData) {
-//             return res.status(404).json({ message: 'Data not found' });
-//         }
-//         res.status(200).json({ success: true, message: 'Data deleted successfully', data: deletedData });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
-//     }
-// };
-
 const deleteCustomerAndProductDataById = async (req, res) => {
-    const { arrayId } = req.params; // Get the array element _id from the request params
+    const { arrayId } = req.params;
     try {
-        // Delete the array element by matching the array element _id using $pull
-        const deletedData = await AllCustomerAndProductData.updateOne(
-            {}, // No need to specify the parent document _id since you are targeting the array element directly
-            { $pull: { dataArray: { _id: arrayId } } } // Remove the array element with the given _id
-        );
+        // Delete document by matching the _id
+        const deletedData = await AllCustomerAndProductData.findOneAndDelete({ "dataArray._id": arrayId });
 
         if (!deletedData) {
             return res.status(404).json({ message: 'Data not found' });
@@ -112,6 +95,25 @@ const deleteCustomerAndProductDataById = async (req, res) => {
     }
 };
 
+
+// const deleteCustomerAndProductDataById = async (req, res) => {
+//     const { dataId, arrayId } = req.params; // Separate the parent document _id (dataId) and the array element _id (arrayId)
+//     try {
+//         // Delete the array element by matching both the parent document _id and the array element _id
+//         const deletedData = await AllCustomerAndProductData.updateOne(
+//             { _id: dataId }, // Match the parent document _id
+//             { $pull: { dataArray: { _id: arrayId } } } // Remove the array element with the given _id
+//         );
+
+//         if (!deletedData) {
+//             return res.status(404).json({ message: 'Data not found' });
+//         }
+
+//         res.status(200).json({ success: true, message: 'Data deleted successfully', data: deletedData });
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
+//     }
+// };
 
 
 
