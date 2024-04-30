@@ -79,14 +79,33 @@ const deleteAllCustomerAndProductData = async (req, res) => {
     }
 };
 
+// const deleteCustomerAndProductDataById = async (req, res) => {
+//     const { productId } = req.params;
+//     try {
+//         // Delete document by matching the productId within the dataArray
+//         const deletedData = await AllCustomerAndProductData.findOneAndDelete({ "dataArray.productId": productId });
+//         if (!deletedData) {
+//             return res.status(404).json({ message: 'Data not found' });
+//         }
+//         res.status(200).json({ success: true, message: 'Data deleted successfully', data: deletedData });
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: 'Server error', error: error.message });
+//     }
+// };
+
 const deleteCustomerAndProductDataById = async (req, res) => {
-    const { productId } = req.params;
+    const { dataId, arrayId } = req.params; // Separate the parent document _id (dataId) and the array element _id (arrayId)
     try {
-        // Delete document by matching the productId within the dataArray
-        const deletedData = await AllCustomerAndProductData.findOneAndDelete({ "dataArray.productId": productId });
+        // Delete the array element by matching both the parent document _id and the array element _id
+        const deletedData = await AllCustomerAndProductData.updateOne(
+            { _id: dataId }, // Match the parent document _id
+            { $pull: { dataArray: { _id: arrayId } } } // Remove the array element with the given _id
+        );
+
         if (!deletedData) {
             return res.status(404).json({ message: 'Data not found' });
         }
+
         res.status(200).json({ success: true, message: 'Data deleted successfully', data: deletedData });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
