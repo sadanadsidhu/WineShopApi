@@ -80,10 +80,10 @@ const deleteAllCustomerAndProductData = async (req, res) => {
 };
 
 const deleteCustomerAndProductDataById = async (req, res) => {
-    const { _id } = req.params;
+    const { productId } = req.params;
     try {
         // Delete document by matching the productId within the dataArray
-        const deletedData = await AllCustomerAndProductData.findOneAndDelete({ 'dataArray.productId': _id });
+        const deletedData = await AllCustomerAndProductData.findOneAndDelete({ "dataArray.productId": productId });
         if (!deletedData) {
             return res.status(404).json({ message: 'Data not found' });
         }
@@ -92,6 +92,7 @@ const deleteCustomerAndProductDataById = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 };
+
 
 
 module.exports = {
