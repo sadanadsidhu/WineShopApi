@@ -80,10 +80,10 @@ const deleteAllCustomerAndProductData = async (req, res) => {
 };
 
 // const deleteCustomerAndProductDataById = async (req, res) => {
-//     const { productId } = req.params;
+//     const {  arrayId } = req.params;
 //     try {
 //         // Delete document by matching the productId within the dataArray
-//         const deletedData = await AllCustomerAndProductData.findOneAndDelete({ "dataArray.productId": productId });
+//         const deletedData = await AllCustomerAndProductData.findOneAndDelete({ "dataArray.productId": arrayId});
 //         if (!deletedData) {
 //             return res.status(404).json({ message: 'Data not found' });
 //         }
@@ -94,11 +94,11 @@ const deleteAllCustomerAndProductData = async (req, res) => {
 // };
 
 const deleteCustomerAndProductDataById = async (req, res) => {
-    const { dataId, arrayId } = req.params; // Separate the parent document _id (dataId) and the array element _id (arrayId)
+    const { arrayId } = req.params; // Get the array element _id from the request params
     try {
-        // Delete the array element by matching both the parent document _id and the array element _id
+        // Delete the array element by matching the array element _id using $pull
         const deletedData = await AllCustomerAndProductData.updateOne(
-            { _id: dataId }, // Match the parent document _id
+            {}, // No need to specify the parent document _id since you are targeting the array element directly
             { $pull: { dataArray: { _id: arrayId } } } // Remove the array element with the given _id
         );
 
@@ -111,6 +111,7 @@ const deleteCustomerAndProductDataById = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server error', error: error.message });
     }
 };
+
 
 
 

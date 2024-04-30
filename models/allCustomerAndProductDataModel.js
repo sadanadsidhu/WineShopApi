@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const allCustomerAndProductDataSchema = new mongoose.Schema({
     dataArray: {
-        type: [{
             productId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'SubWineCategory',
@@ -17,8 +16,6 @@ const allCustomerAndProductDataSchema = new mongoose.Schema({
                 ref: 'WineShop',
                 required: true
             }
-        }],
-        required: true
     }
 });
 

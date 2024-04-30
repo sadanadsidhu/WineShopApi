@@ -14,6 +14,6 @@ router.post('/create-customer-data-to-cart', createAllCustomerAndProductData);
 router.get('/get-all-customer-data-to-cart', getAllCustomerAndProductData);
 router.get('/get-shopId-customer-data-to-cart/:shopId', getAllCustomerDataByShopId);
 router.delete('/delete-all-shopId-customer-data-to-cart', deleteAllCustomerAndProductData);
-router.delete('/delete-one-productId-customer-data-to-cart/:dataId/:arrayId', deleteCustomerAndProductDataById);
+router.delete('/delete-one-productId-customer-data-to-cart/:arrayId', deleteCustomerAndProductDataById);
 
 module.exports = router;   
