@@ -168,6 +168,25 @@ const deleteAllCartItems = async (req, res) => {
     }
 };
 
+const deleteCartItemById = async (req, res) => {
+    try {
+        const { cartId } = req.params;
+
+        // Find the cart item by its ID and delete it
+        const deletedCartItem = await AddToCart.findByIdAndDelete(cartId);
+
+        // Check if the cart item was found and deleted
+        if (!deletedCartItem) {
+            return res.status(404).json({ code: 404, message: 'Cart item not found' });
+        }
+
+        // Return success response
+        return res.status(200).json({ code: 200, message: 'Cart item deleted successfully', data: deletedCartItem });
+    } catch (error) {
+        return res.status(500).json({ code: 500, message: 'Server error', error: error.message });
+    }
+};
+
 //////////////////hideen cart items
 const deleteCartItem = async (req, res) => {
     try {
@@ -214,6 +233,7 @@ module.exports = {
     addToCart,
     updateCartItem,
     deleteCartItem,
+    deleteCartItemById,
     deleteAllCartItems,
     saveAllCartItems 
 };

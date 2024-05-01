@@ -15,23 +15,23 @@ const createSelfie = async (req, res) => {
   try {
     const { images, mobileNumber } = req.body;
 
-    const otp = await Otp.findOne({ mobileNumber: mobileNumber }); // Find Otp document
+    // const otp = await Otp.findOne({ mobileNumber: mobileNumber }); // Find Otp document
 
-    if (!otp) {
-      return res.status(404).json({ success: false, message: 'Otp not found' });
-    }
+    // if (!otp) {
+    //   return res.status(404).json({ success: false, message: 'Otp not found' });
+    // }
 
     // Create UserSelfie with correct status field name (status)
     const newSelfie = await UserSelfie.create({
       images,
-      mobileNumber: otp.mobileNumber,
-      otp: otp._id,
+      mobileNumber: mobileNumber,
+      // otp: otp._id,
       statuss: true, // Set status to true initially
     });
 
     // Update Otp.statusUser (not recommended due to tight coupling)
-    otp.statusUser = true;
-    await otp.save();
+    // otp.statusUser = true;
+    // await otp.save();
 
     res.status(201).json({ success: true, data: newSelfie });
   } catch (error) {

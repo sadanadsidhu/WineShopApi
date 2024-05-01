@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 const addressSchema = new Schema({
     houseFlatBlockNo: {
-      type: Number,
+      type: String,
       required: true,
     },
     apartmentRoadArea: {
