@@ -73,6 +73,10 @@ app.use('/', require("./routes/allDataCustomerAndCategoryRoutes"));
 app.use('/', require("./routes/allCustomerAndProductDataRoutes"));
 app.use('/', require("./routes/acceptAndDeclineArrayRoutes"));
 app.use('/', require("./routes/declineOrderDataRoutes"));
+app.use('/', require("./routes/confirmedOrderArrayRoutes"));
+app.use('/', require("./routes/deliverBoyRegistrationRoutes"));
+app.use('/', require("./routes/uploadAadharDeliveryRoutes"));
+app.use('/', require("./routes/uploadDeliveryBoySelfieRoutes"));
 
 server.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`)

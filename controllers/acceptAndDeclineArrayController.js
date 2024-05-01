@@ -10,7 +10,7 @@ const addAcceptOrder = async (req, res) => {
         const newAcceptAndDeclineOrder = new AcceptAndDeclineOrder({
             acceptOrder: acceptOrderId,
             shopId: shopId // Assuming shopId is available in the request body
-        });
+        }); 
 
         // Save the new document to the database
         await newAcceptAndDeclineOrder.save();

@@ -26,11 +26,11 @@ const subWineCategorySchema = new mongoose.Schema({
     ref: 'Category',
     required: true
   },
-  // wineShopID: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'WineShop',
-  //   required: true
-  // }
+  wineShopID: {
+    type: Schema.Types.ObjectId,
+    ref: 'WineShop',
+    required: true
+  }
 
 });
 
