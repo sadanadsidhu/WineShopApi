@@ -4,6 +4,7 @@ const {
     createAllCustomerAndProductData,
     getAllCustomerAndProductData,
     getAllCustomerDataByShopId,
+    getAllCustomerDataByOrderId,
     deleteAllCustomerAndProductData,
     deleteCustomerAndProductDataById,
 
@@ -13,6 +14,7 @@ const {
 router.post('/create-customer-data-to-cart', createAllCustomerAndProductData);
 router.get('/get-all-customer-data-to-cart', getAllCustomerAndProductData);
 router.get('/get-shopId-customer-data-to-cart/:shopId', getAllCustomerDataByShopId);
+router.get('/get-shopId-customer-data-to-cart-order/:orderId', getAllCustomerDataByOrderId);
 router.delete('/delete-all-shopId-customer-data-to-cart', deleteAllCustomerAndProductData);
 router.delete('/delete-one-productId-customer-data-to-cart/:arrayId', deleteCustomerAndProductDataById);
 

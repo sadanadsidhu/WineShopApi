@@ -19,6 +19,11 @@ const allCustomerAndProductDataSchema = new mongoose.Schema({
             }
         }],
         required: true
+    },
+    orderId: {
+        type: Number, // or String, depending on your preference
+        required: true,
+        unique: true // If orderId needs to be unique for each document
     }
 });
 
