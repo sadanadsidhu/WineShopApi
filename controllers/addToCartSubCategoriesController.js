@@ -44,18 +44,18 @@ const addToCart = async (req, res) => {
             });
         }
          // Calculate total milliliters
-         const totalMlInCart = await totalMl();
+        //  const totalMlInCart = await totalMl();
 
-         // Calculate total milliliters for the new item being added
-         const totalMlForNewItem = quantity * ml;
+        //  // Calculate total milliliters for the new item being added
+        //  const totalMlForNewItem = quantity * ml;
  
-         // Check if adding the new item will exceed the limit
-         if (totalMlInCart + totalMlForNewItem > 60000) {
-             return res.status(400).json({
-                 code: 400,
-                 message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.'
-             });
-         }
+        //  // Check if adding the new item will exceed the limit
+        //  if (totalMlInCart + totalMlForNewItem > 60000) {
+        //      return res.status(400).json({
+        //          code: 400,
+        //          message: 'Total ml in cart exceeds 60000 grams (6 litre). You cannot order greater than 6 litre.'
+        //      });
+        //  }
 
         const addToCartDoc = new AddToCart({ quantity, ml, totalPrice, cart});
 

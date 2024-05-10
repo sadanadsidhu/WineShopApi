@@ -8,7 +8,7 @@ const generateOrderId = () => {
 ////////////////////////////////////////////////// CREATE ORDER /////////////////////////////////////////
 const createDataCustomerAndProduct = async (req, res) => {
     try {
-
+        
         const orderId = generateOrderId();
 
         const { totalPriceSum, deliveryCharges, serviceCharges, grandTotalPrice,paymentId, customerAddress, productDetails, shopDetails } = req.body;
@@ -31,22 +31,43 @@ const createDataCustomerAndProduct = async (req, res) => {
     }
 };
 //////////////////////////////////////////// GET ALL ORDERERS ////////////////////////////////////////////
+// const getAllDataCustomerAndProduct = async (req, res) => {
+//     try {
+//         const allData = await AllCustomerAndProductDetails.find()
+//             .populate('AddToCart')
+//             .populate('shopDetails')
+//             .populate('customerAddress');
+
+//         return res.status(200).json(
+//             { code: 200,
+//             message: 'All data retrieved successfully.',
+//             data: allData });
+//     } catch (error) {
+//         return res.status(500).json(
+//             { code: 500, message: 'Server error', error: error.message });
+//     }
+// };
 const getAllDataCustomerAndProduct = async (req, res) => {
     try {
         const allData = await AllCustomerAndProductDetails.find()
-            .populate('productDetails')
+            .populate('productDetails') // Correct reference name
             .populate('shopDetails')
             .populate('customerAddress');
 
-        return res.status(200).json(
-            { code: 200,
+        return res.status(200).json({
+            code: 200,
             message: 'All data retrieved successfully.',
-            data: allData });
+            data: allData
+        });
     } catch (error) {
-        return res.status(500).json(
-            { code: 500, message: 'Server error', error: error.message });
+        return res.status(500).json({
+            code: 500,
+            message: 'Server error',
+            error: error.message
+        });
     }
 };
+
 /////////////////////////////////////////// GET ORDER ACCORDING ODERID ////////////////////////////////////
 
 const getDataByOrderId = async (req, res) => {
@@ -77,7 +98,7 @@ const getDataByShopId = async (req, res) => {
 
         // Find data based on shopId
         const data = await AllCustomerAndProductDetails.find({ shopDetails: shopId })
-            .populate('productDetails')
+            .populate('AddToCart')
             .populate('shopDetails')
             .populate('customerAddress');
 

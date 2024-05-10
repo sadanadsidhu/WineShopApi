@@ -78,6 +78,8 @@ app.use('/', require("./routes/deliverBoyRegistrationRoutes"));
 app.use('/', require("./routes/uploadAadharDeliveryRoutes"));
 app.use('/', require("./routes/uploadDeliveryBoySelfieRoutes"));
 app.use('/', require("./routes/phonePayGateWayRoutes"));
+app.use('/', require("./routes/wineCategoryCorrectionRoutes"));
+
 server.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`)
 );

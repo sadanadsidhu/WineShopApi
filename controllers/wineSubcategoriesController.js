@@ -5,7 +5,7 @@ const Category = require('../models/winesCategoriesModel');
 
 const createSubWineCategory = async (req, res) => {
     try {
-        const { name, miligram, price, images, subCategoryType, categoryId } = req.body;
+        const { name, miligram, price, images, subCategoryType,categoryId,wineShopId } = req.body;
         
         // Check if the ID of the referenced category is provided
         if (!categoryId) {
@@ -36,7 +36,7 @@ const createSubWineCategory = async (req, res) => {
             images,
             subCategoryType,
             categoryID: categoryId, // Set the reference to the Category document
-            // wineShopID: wineShopId // Set the reference to the WineShop document
+            wineShopID: wineShopId // Set the reference to the WineShop document
         });
 
         const savedSubWineCategory = await newSubWineCategory.save();

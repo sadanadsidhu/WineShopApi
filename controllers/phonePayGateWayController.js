@@ -1,5 +1,3 @@
-
-
 // Constants for your application
 // const {
 //     MERCHANT_ID,
