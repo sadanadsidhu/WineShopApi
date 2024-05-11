@@ -1,5 +1,6 @@
 const WineShop = require('../models/wineShopModel');
 const SubWineCategory=require('../models/wineSubCategoriesModel')
+const CustomerAddress=require('../models/customerCurrentAddressAndPermanentAddressModel')
 
 ////////////////////////////////CALCULATION DISTANCE OF WINESHOP WITHIN 5 KM FROM CURRENT LOCATION/////////////
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -17,7 +18,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 /////////////Route handler to get wine shops within 5 km of current location
-const getWineShopsWithin5km = async (req, res) => {
+const postWineShopsWithin5km = async (req, res) => {
     try {
         // Assuming current location coordinates are provided in request body
         const { currentLat, currentLon } = req.body;
@@ -33,9 +34,45 @@ const getWineShopsWithin5km = async (req, res) => {
 
         // Filter wine shops within 5 km of the current location
         const wineShopsWithin5km = wineShopsWithDistance.filter(wineShop => {
-            return wineShop.distance <= 100; // Filter wine shops within 100 km
+            return wineShop.distance <= 10000; // Filter wine shops within 100 km
         });
 
+        res.status(200).json(wineShopsWithin5km);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+const getWineShopsWithin5km = async (req, res) => {
+    try {
+        // Fetch all customers with populated localAddress field
+        const customers = await CustomerAddress.find().populate('localAddress');
+
+        // Extract latitude and longitude from the localAddress of the first customer
+        const localLat = customers[0].localAddress.latitude;
+        const localLon = customers[0].localAddress.lognitude;
+
+        // Fetch all wine shops from the database
+        const wineShops = await WineShop.find();
+
+        // Calculate distance between customer's local address and each wine shop
+        const wineShopsWithDistance = wineShops.map(wineShop => {
+            const distance = calculateDistance(
+                localLat, 
+                localLon, 
+                wineShop.latitude, 
+                wineShop.longitude
+            );
+            console.log('wineShop.latitude', wineShop.latitude);
+            console.log('wineShop.longitude', wineShop.longitude);
+            console.log('distance', distance)
+            return { ...wineShop.toObject(), distance }; // Add distance property to each wine shop
+        });
+        // Filter wine shops within 5 km of the local address
+        const wineShopsWithin5km = wineShopsWithDistance.filter(wineShop => {
+            return wineShop.distance >= 5; // Filter wine shops within 5 km
+        });
+          console.log('wineShopsWithin5km',wineShopsWithin5km)
         res.status(200).json(wineShopsWithin5km);
     } catch (error) {
         console.error(error);
@@ -105,6 +142,7 @@ const getAllWineShops = async (req, res) => {
 };
 
 module.exports = {
+    postWineShopsWithin5km,
     getWineShopsWithin5km,
     createWineShop,
     updateWineShop,
