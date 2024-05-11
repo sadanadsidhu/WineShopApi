@@ -16,7 +16,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return distance;
 }
 
-// Route handler to get wine shops within 5 km of current location
+/////////////Route handler to get wine shops within 5 km of current location
 const getWineShopsWithin5km = async (req, res) => {
     try {
         // Assuming current location coordinates are provided in request body
@@ -25,10 +25,15 @@ const getWineShopsWithin5km = async (req, res) => {
         // Fetch all wine shops from the database
         const wineShops = await WineShop.find();
 
-        // Filter wine shops within 5 km of the current location
-        const wineShopsWithin5km = wineShops.filter(wineShop => {
+        // Filter wine shops within 100 km of the current location
+        const wineShopsWithDistance = wineShops.map(wineShop => {
             const distance = calculateDistance(currentLat, currentLon, wineShop.latitude, wineShop.longitude);
-            return distance <= 5; // Filter wine shops within 5 km
+            return { ...wineShop.toObject(), distance }; // Add distance property to each wine shop
+        });
+
+        // Filter wine shops within 5 km of the current location
+        const wineShopsWithin5km = wineShopsWithDistance.filter(wineShop => {
+            return wineShop.distance <= 100; // Filter wine shops within 100 km
         });
 
         res.status(200).json(wineShopsWithin5km);
@@ -37,6 +42,8 @@ const getWineShopsWithin5km = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+
 
 // Create WineShop
 const createWineShop = async (req, res) => {
