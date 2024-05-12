@@ -80,7 +80,7 @@ const allCustomerAndProductDetailsSchema = new Schema({
     },
     productDetails:[{
         type: Schema.Types.ObjectId,
-        ref: 'AddToCart',
+        ref: 'SubWineCategory',
         required: true    
     }],
     shopDetails:[{
