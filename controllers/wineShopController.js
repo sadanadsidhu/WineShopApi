@@ -106,6 +106,33 @@ const createWineShop = async (req, res) => {
     }
 };
 
+/////////////////////// add available category /////////////////////////////////////////////////////////
+const addCategoryToWineShop = async (req, res) => {
+    try {
+        const { wineShopId, categoryId } = req.body;
+
+        if (!wineShopId || !categoryId) {
+            return res.status(400).json({ message: 'WineShop ID and Category ID are required' });
+        }
+
+        // Find the WineShop and add the category to the availableCategory array
+        const updatedWineShop = await WineShop.findByIdAndUpdate(
+            wineShopId,
+            { $addToSet: { availableCategory: categoryId } },
+            { new: true }
+        ).populate('availableCategory');
+
+        if (!updatedWineShop) {
+            return res.status(404).json({ message: 'WineShop not found' });
+        }
+
+        res.status(200).json(updatedWineShop);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 // Update WineShop
 const updateWineShop = async (req, res) => {
     try {
@@ -145,6 +172,7 @@ module.exports = {
     postWineShopsWithin5km,
     getWineShopsWithin5km,
     createWineShop,
+    addCategoryToWineShop,
     updateWineShop,
     getAllWineShops
 };

@@ -5,6 +5,7 @@ const wineShopController = require("../controllers/wineShopController");
 // const basePath = "/wineShops";
 
 router.post("/create-wineshop", wineShopController.createWineShop);
+router.post("/add/available/category", wineShopController.addCategoryToWineShop);
 router.put("/update-wineshop/:id", wineShopController.updateWineShop);
 router.get("/get-all-shoplocation", wineShopController.getAllWineShops);
 router.get("/get-near-wineshop-within-5km", wineShopController.getWineShopsWithin5km);
