@@ -64,10 +64,7 @@ app.use("/", require("./routes/wineSubCategoriesImagesRoutes"));
 app.use("/", require("./routes/wineSubCategoriesRoutes"));
 app.use("/", require("./routes/addToCartSubCategoriesRoutes"));
 app.use("/", require("./routes/allAddToCardSubCategoriesRoutes"));
-app.use(
-  "/",
-  require("./routes/customerCurrentAddressAndPermanentAddressRoutes")
-);
+app.use("/",require("./routes/customerCurrentAddressAndPermanentAddressRoutes"));
 app.use("/", require("./routes/uploadWineshopimagesRoutes"));
 app.use("/", require("./routes/paymentGetWayRoutes"));
 app.use("/", require("./routes/uploadSwiperImagesRoutes"));

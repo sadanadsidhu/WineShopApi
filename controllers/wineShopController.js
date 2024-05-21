@@ -43,6 +43,7 @@ const postWineShopsWithin5km = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
 const getWineShopsWithin5km = async (req, res) => {
     try {
         // Fetch all customers with populated localAddress field
@@ -133,6 +134,34 @@ const addCategoryToWineShop = async (req, res) => {
     }
 };
 
+///////////////////////// delete category from wineshop ////////////////////////////////////////////////////////////////////
+
+const deleteCategoryFromWineShop = async (req, res) => {
+    try {
+        const { wineShopId, categoryId } = req.params;
+
+        if (!wineShopId || !categoryId) {
+            return res.status(400).json({ message: 'WineShop ID and Category ID are required' });
+        }
+
+        // Find the WineShop and remove the category
+        const updatedWineShop = await WineShop.findByIdAndUpdate(
+            wineShopId,
+            { $pull: { availableCategory: categoryId } },
+            { new: true }
+        ).populate('availableCategory');
+
+        if (!updatedWineShop) {
+            return res.status(404).json({ message: 'WineShop not found' });
+        }
+
+        res.status(200).json(updatedWineShop);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 // Update WineShop
 const updateWineShop = async (req, res) => {
     try {
@@ -156,6 +185,39 @@ const updateWineShop = async (req, res) => {
     }
 };
 
+const updateCategoryInWineShop = async (req, res) => {
+    try {
+        const { wineShopId, categoryId} = req.params;
+
+        if (!wineShopId || !categoryId ) {
+            return res.status(400).json({ message: 'WineShop ID, Category ID, and new Category ID are required' });
+        }
+
+        // Find the WineShop
+        const wineShop = await WineShop.findById(wineShopId);
+
+        if (!wineShop) {
+            return res.status(404).json({ message: 'WineShop not found' });
+        }
+
+        // Check if the category exists in the availableCategory array
+        const categoryIndex = wineShop.availableCategory.indexOf(categoryId);
+        if (categoryIndex === -1) {
+            return res.status(404).json({ message: 'Category not found in the availableCategory array' });
+        }
+
+        // Replace the old category with the new category
+        wineShop.availableCategory[categoryIndex] = categoryId ;
+
+        // Save the updated wine shop
+        const updatedWineShop = await wineShop.save().then(wineShop => wineShop.populate('availableCategory').execPopulate());
+
+        res.status(200).json(updatedWineShop);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 // Get all WineShops
 const getAllWineShops = async (req, res) => {
@@ -174,6 +236,8 @@ module.exports = {
     createWineShop,
     addCategoryToWineShop,
     updateWineShop,
+    deleteCategoryFromWineShop,
+    updateCategoryInWineShop,
     getAllWineShops
 };
 
