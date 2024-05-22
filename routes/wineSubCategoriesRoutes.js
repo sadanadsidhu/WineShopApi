@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
     createSubWineCategory,
+    addSubWineCategoryToWineShop,
     updateSubWineCategory,
     getAllSubWineCategories,
     getSubWineCategoryById,
@@ -15,6 +16,7 @@ const {
 
 // Define routes
 router.post('/wine-subcategories', createSubWineCategory);
+router.post('/add/subategory/availablecategory', addSubWineCategoryToWineShop);
 router.put('/wine-subcategories/:id', updateSubWineCategory);
 router.get('/get-all-wine-subcategories', getAllSubWineCategories);
 router.get('/wine-subcategories/:id', getSubWineCategoryById);

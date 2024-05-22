@@ -1,6 +1,7 @@
 const SubWineCategory = require('../models/wineSubCategoriesModel');
 const getImages = require('../middleware/wineSubCategories');
 const Category = require('../models/winesCategoriesModel');
+const WineShop = require('../models/wineShopModel');
 
 
 const createSubWineCategory = async (req, res) => {
@@ -46,7 +47,47 @@ const createSubWineCategory = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+//////////////////////////////////////// ADDD SUBWINE CATEGORY IN AVAILABLE CATEGORY ////////////////////////////////////////////////////////////////////////////
+const addSubWineCategoryToWineShop = async (req, res) => {
+    try {
+        const { subCategoryId, wineShopId } = req.body;
 
+        // Check if subCategoryId is provided
+        if (!subCategoryId) {
+            return res.status(400).json({ message: 'Please provide subCategoryId' });
+        }
+
+        // Check if wineShopId is provided
+        if (!wineShopId) {
+            return res.status(400).json({ message: 'Please provide wineShopId' });
+        }
+
+        // Check if the referenced SubWineCategory exists
+        const subWineCategory = await SubWineCategory.findById(subCategoryId);
+        if (!subWineCategory) {
+            return res.status(404).json({ message: 'SubWineCategory not found' });
+        }
+
+        // Check if the referenced WineShop exists
+        const wineShop = await WineShop.findById(wineShopId);
+        if (!wineShop) {
+            return res.status(404).json({ message: 'WineShop not found' });
+        }
+
+        // Add the SubWineCategory to the WineShop's availableCategory array
+        if (!wineShop.availableCategory.includes(subCategoryId)) {
+            wineShop.availableCategory.push(subCategoryId);
+            await wineShop.save();
+        } else {
+            return res.status(400).json({ message: 'SubWineCategory already exists in the WineShop' });
+        }
+
+        res.status(200).json({ message: 'SubWineCategory added to WineShop successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 // Update SubWineCategory
 const updateSubWineCategory = async (req, res) => {
     try {
@@ -197,6 +238,7 @@ const deleteAllSubWineCategories = async (req, res) => {
     
 module.exports = {
     createSubWineCategory,
+    addSubWineCategoryToWineShop,
     updateSubWineCategory,
     getAllSubWineCategories,
     getSubWineCategoryById,
