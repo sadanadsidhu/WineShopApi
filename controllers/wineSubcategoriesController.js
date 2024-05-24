@@ -88,6 +88,50 @@ const addSubWineCategoryToWineShop = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+/////////////////////////////////////////// REMOVE SUBCATEGORY FROM WINESHOP ///////////////////////////////////////////
+const removeSubWineCategoryFromWineShop = async (req, res) => {
+    try {
+        const { wineShopId,subCategoryId } = req.params;
+
+        // Check if subCategoryId is provided
+        if (!subCategoryId) {
+            return res.status(400).json({ message: 'Please provide subCategoryId' });
+        }
+
+        // Check if wineShopId is provided
+        if (!wineShopId) {
+            return res.status(400).json({ message: 'Please provide wineShopId' });
+        }
+
+        // Check if the referenced SubWineCategory exists
+        const subWineCategory = await SubWineCategory.findById(subCategoryId);
+        if (!subWineCategory) {
+            return res.status(404).json({ message: 'SubWineCategory not found' });
+        }
+
+        // Check if the referenced WineShop exists
+        const wineShop = await WineShop.findById(wineShopId);
+        if (!wineShop) {
+            return res.status(404).json({ message: 'WineShop not found' });
+        }
+
+        // Remove the SubWineCategory from the WineShop's availableCategory array
+        const index = wineShop.availableCategory.indexOf(subCategoryId);
+        if (index > -1) {
+            wineShop.availableCategory.splice(index, 1);
+            await wineShop.save();
+        } else {
+            return res.status(400).json({ message: 'SubWineCategory does not exist in the WineShop' });
+        }
+
+        res.status(200).json({ message: 'SubWineCategory removed from WineShop successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 // Update SubWineCategory
 const updateSubWineCategory = async (req, res) => {
     try {
@@ -239,6 +283,7 @@ const deleteAllSubWineCategories = async (req, res) => {
 module.exports = {
     createSubWineCategory,
     addSubWineCategoryToWineShop,
+    removeSubWineCategoryFromWineShop,
     updateSubWineCategory,
     getAllSubWineCategories,
     getSubWineCategoryById,

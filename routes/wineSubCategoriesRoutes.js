@@ -3,6 +3,7 @@ const router = express.Router();
 const {
     createSubWineCategory,
     addSubWineCategoryToWineShop,
+    removeSubWineCategoryFromWineShop,
     updateSubWineCategory,
     getAllSubWineCategories,
     getSubWineCategoryById,
@@ -17,6 +18,7 @@ const {
 // Define routes
 router.post('/wine-subcategories', createSubWineCategory);
 router.post('/add/subategory/availablecategory', addSubWineCategoryToWineShop);
+router.delete('/delete/available/:wineShopId/:subCategoryId', removeSubWineCategoryFromWineShop);
 router.put('/wine-subcategories/:id', updateSubWineCategory);
 router.get('/get-all-wine-subcategories', getAllSubWineCategories);
 router.get('/wine-subcategories/:id', getSubWineCategoryById);
