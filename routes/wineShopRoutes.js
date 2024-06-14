@@ -11,6 +11,7 @@ router.post(
 );
 router.put("/update-wineshop/:id", wineShopController.updateWineShop);
 router.get("/get-all-shoplocation", wineShopController.getAllWineShops);
+router.get("/get/wineshop/:id", wineShopController.getWineShopById);
 router.get(
   "/get-near-wineshop-within-5km",
   wineShopController.getWineShopsWithin5km

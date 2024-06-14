@@ -230,6 +230,30 @@ const getAllWineShops = async (req, res) => {
     }
 };
 
+const getWineShopById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Validate the ID format if necessary
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ message: 'Invalid WineShop ID format' });
+        }
+
+        // Find the WineShop by ID
+        const wineShop = await WineShop.findById(id).populate('availableCategory');
+
+        if (!wineShop) {
+            return res.status(404).json({ message: 'WineShop not found' });
+        }
+
+        // Return the WineShop data
+        res.status(200).json(wineShop);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
     postWineShopsWithin5km,
     getWineShopsWithin5km,
@@ -238,6 +262,7 @@ module.exports = {
     updateWineShop,
     deleteCategoryFromWineShop,
     updateCategoryInWineShop,
-    getAllWineShops
+    getAllWineShops,
+    getWineShopById
 };
 
