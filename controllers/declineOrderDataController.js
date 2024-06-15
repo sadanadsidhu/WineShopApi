@@ -33,17 +33,58 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     const distance = R * c; // Distance in kilometers
     return distance;
 }
+////// add decline order /////////////////////////////////////////////
+// const addDeclineOrder = async (req, res) => {
+//     try {
+//         const { declineOrderId, shopId } = req.body;
+
+//         // Create a new DeclineOrder document with the decline order
+//         const newDeclineOrder = new DeclineOrder({
+//             declineOrder: declineOrderId,
+//             shopId: shopId
+//         });
+
+//         // Save the new document to the database
+//         await newDeclineOrder.save();
+
+//         // Fetch the coordinates of the target shop
+//         const targetShop = await WineShop.findById(shopId);
+//         const targetLatitude = targetShop.latitude;
+//         const targetLongitude = targetShop.longitude;
+
+//         // Query all WineShop documents
+//         const allShops = await WineShop.find({});
+
+//         // Calculate distances and filter nearby shops
+//         const nearbyShops = allShops.filter(shop => {
+//             const distance = calculateDistance(targetLatitude, targetLongitude, shop.latitude, shop.longitude);
+//             return distance <= 5; // MAX_DISTANCE is your defined maximum distance
+//         });
+
+//         // Choose the nearest shop
+//         if (nearbyShops.length > 0) {
+//             const nearestShop = nearbyShops[0];
+//             // Implement logic to forward the decline order to the nearest shop
+//             console.log(`Order declined, forwarding to nearby wine shop with ID: ${nearestShop._id}`);
+//         } else {
+//             console.log("No nearby wine shops found.");
+//         }
+
+//         res.status(201).json({ message: 'Decline order added successfully', declineOrder: declineOrderId });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Server Error' });
+//     }
+// };
 const addDeclineOrder = async (req, res) => {
     try {
         const { declineOrderId, shopId } = req.body;
 
-        // Create a new DeclineOrder document with the decline order
+        // Create and save a new DeclineOrder document
         const newDeclineOrder = new DeclineOrder({
             declineOrder: declineOrderId,
             shopId: shopId
         });
-
-        // Save the new document to the database
         await newDeclineOrder.save();
 
         // Fetch the coordinates of the target shop
@@ -69,7 +110,10 @@ const addDeclineOrder = async (req, res) => {
             console.log("No nearby wine shops found.");
         }
 
-        res.status(201).json({ message: 'Decline order added successfully', declineOrder: declineOrderId });
+        // Delete the decline order from the database
+        await DeclineOrder.findByIdAndDelete(newDeclineOrder._id);
+
+        res.status(201).json({ message: 'Decline order added and deleted successfully', declineOrder: declineOrderId });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
@@ -91,8 +135,44 @@ const getDeclineOrders = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+//////////////////// delete all decline order ////////////////////////////////////////
+const deleteAllDeclineOrders = async (req, res) => {
+    try {
+        // Delete all documents from the DeclineOrder collection
+        const result = await DeclineOrder.deleteMany({});
 
+        // Send a success response with the count of deleted documents
+        res.status(200).json({
+            message: 'All decline orders deleted successfully',
+            deletedCount: result.deletedCount
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+////////////////// Delete product according to id ////////////////////////
+const deleteDeclineOrderById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Find and delete the decline order by ID
+        const deletedOrder = await DeclineOrder.findByIdAndDelete(id);
+
+        // Check if the decline order was found and deleted
+        if (!deletedOrder) {
+            return res.status(404).json({ message: 'Decline order not found' });
+        }
+
+        res.status(200).json({ message: 'Decline order deleted successfully', id: id });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
 module.exports = {
     addDeclineOrder,
-    getDeclineOrders
+    getDeclineOrders,
+    deleteAllDeclineOrders,
+    deleteDeclineOrderById
 };

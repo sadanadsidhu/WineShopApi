@@ -1,21 +1,32 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
-    createAllCustomerAndProductData,
-    getAllCustomerAndProductData,
-    getAllCustomerDataByShopId,
-    getAllCustomerDataByOrderId,
-    deleteAllCustomerAndProductData,
-    deleteCustomerAndProductDataById,
-
-} = require('../controllers/allCustomerAndProductDataController');
+  createAllCustomerAndProductData,
+  getAllCustomerAndProductData,
+  getAllCustomerDataByShopId,
+  getAllCustomerDataByOrderId,
+  deleteAllCustomerAndProductData,
+  deleteCustomerAndProductDataById,
+} = require("../controllers/allCustomerAndProductDataController");
 
 // Define routes
-router.post('/create-customer-data-to-cart', createAllCustomerAndProductData);
-router.get('/get-all-customer-data-to-cart', getAllCustomerAndProductData);
-router.get('/get-shopId-customer-data-to-cart/:shopId', getAllCustomerDataByShopId);
-router.get('/get-shopId-customer-data-to-cart-order/:orderId', getAllCustomerDataByOrderId);
-router.delete('/delete-all-shopId-customer-data-to-cart', deleteAllCustomerAndProductData);
-router.delete('/delete-one-productId-customer-data-to-cart/:arrayId', deleteCustomerAndProductDataById);
+router.post("/create-customer-data-to-cart", createAllCustomerAndProductData);
+router.get("/get-all-customer-data-to-cart", getAllCustomerAndProductData);
+router.get(
+  "/get-shopId-customer-data-to-cart/:shopId",
+  getAllCustomerDataByShopId
+);
+router.get(
+  "/get-shopId-customer-data-to-cart-order/:orderId",
+  getAllCustomerDataByOrderId
+);
+router.delete(
+  "/delete-all-shopId-customer-data-to-cart",
+  deleteAllCustomerAndProductData
+);
+router.delete(
+  "/delete-one-productId-customer-data-to-cart/:arrayId",
+  deleteCustomerAndProductDataById
+);
 
-module.exports = router;   
+module.exports = router;
