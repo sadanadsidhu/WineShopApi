@@ -7,7 +7,7 @@ const {
 } = require('../controllers/confirmedOrderArrayController');
 
 // Define routes
-router.post('/add-confirm-order-array', addConfirmOrder);
+router.post('/add-confirm-order', addConfirmOrder);
 router.get('/get-get-order-array/:shopId', getConfirmOrders);
 
 
