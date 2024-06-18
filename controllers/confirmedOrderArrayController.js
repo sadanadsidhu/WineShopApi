@@ -2,6 +2,7 @@
 const ConfirmOrder = require('../models/confirmedOrderArrayModel');
 const AllDeliveryBoyRegisterData = require('../models/deliverBoyRegistrationModel');
 const Product = require('../models/wineSubCategoriesModel');
+const CustomerAddress = require('../models/customerCurrentAddressAndPermanentAddressModel');
 const Shop = require('../models/wineShopModel');
 const addConfirmOrder = async (req, res) => {
     try {
@@ -49,7 +50,9 @@ const getConfirmOrders = async (req, res) => {
         const orders = await ConfirmOrder.find({ delevaryBoyId })
             .populate({
                 path: 'confirmOrder',
+                // path: 'CustomerAddress',
                 populate: [
+                    { path: 'customerAddress', model: 'CustomerAddress' },
                     { path: 'productDetails', model: 'SubWineCategory' },
                     { path: 'shopDetails', model: 'WineShop' }
                 ]
