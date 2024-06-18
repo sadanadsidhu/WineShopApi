@@ -8,7 +8,7 @@ const {
 
 // Define routes
 router.post('/add-confirm-order', addConfirmOrder);
-router.get('/get-get-order-array/:shopId', getConfirmOrders);
+router.get('/get-confirm-order/:delevaryBoyId', getConfirmOrders);
 
 
 module.exports = router

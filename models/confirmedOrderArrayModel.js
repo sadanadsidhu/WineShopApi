@@ -4,7 +4,7 @@ const confirmOrderArraySchema = new mongoose.Schema({
     
        confirmOrder : {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'AcceptAndDeclineOrder',
+                ref: 'AllCustomerAndProductDetails',
                 required: true
             },
             // shopId:{
@@ -12,11 +12,10 @@ const confirmOrderArraySchema = new mongoose.Schema({
             //     ref: 'WineShop',
             //     required: true,
             // },
-        delevaryBoyId:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'DelevaryBoy',
-            required:false,
-        }    
+            delevaryBoyId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'AllDeliveryBoyRegisterData'
+            }   
 });
 
 module.exports = mongoose.model('ConfirmOrder', confirmOrderArraySchema);
