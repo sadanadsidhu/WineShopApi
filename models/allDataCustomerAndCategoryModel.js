@@ -83,11 +83,11 @@ const allCustomerAndProductDetailsSchema = new Schema({
         ref: 'SubWineCategory',
         required: true    
     }],
-    shopDetails:[{
+    shopDetails:{
         type:Schema.Types.ObjectId,
         ref: 'WineShop',
         required: true,
-    }],
+    },
 });
 
 module.exports = mongoose.model('AllCustomerAndProductDetails', allCustomerAndProductDetailsSchema);
