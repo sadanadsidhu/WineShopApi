@@ -26,14 +26,13 @@ const addConfirmOrder = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
-//////////////////////// get confirm order //////////////////////////////////////////////////
+////////////////////////get confirm order ///////////////////////////////////////////////
 const getConfirmOrders = async (req, res) => {
-  const { id } = req.params;
+  const { delevaryBoyId } = req.params;
   try {
-    const orders = await ConfirmOrder.find({ id })
+    const orders = await ConfirmOrder.find({ delevaryBoyId })
       .populate({
         path: 'confirmOrder',
-        model:'ConfirmOrder',
         populate: [
           {
             path: 'customerAddress',

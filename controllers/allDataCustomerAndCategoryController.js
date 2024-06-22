@@ -1,11 +1,11 @@
 const CustomerAllOrder = require("../models/allDataCustomerAndCategoryModel");
 const mongoose = require("mongoose");
-const express = require("express");
+// const express = require("express");
 
-const socketIo = require("socket.io");
-const app = express();
-const server = require("http").createServer(app);
-const io = socketIo(server);
+// const socketIo = require("socket.io");
+// const app = express();
+// const server = require("http").createServer(app);
+// const io = socketIo(server);
 
 
 const generateOrderId = () => {
@@ -43,29 +43,29 @@ const createDataCustomerAndProduct = async (req, res) => {
     // WE ARE WRITE A SOCKERT TO SEND DATA
 
     // WebSocket server logic
-    io.on("connection", (socket) => {
-      console.log("Client connected");
+    // io.on("connection", (socket) => {
+    //   console.log("Client connected");
 
-      // Log any received message
-      socket.onAny((event, ...args) => {
-        console.log(`Received event: ${event}`);
-        console.log(`Received data: ${JSON.stringify(args)}`);
-      });
+    //   // Log any received message
+    //   socket.onAny((event, ...args) => {
+    //     console.log(`Received event: ${event}`);
+    //     console.log(`Received data: ${JSON.stringify(args)}`);
+    //   });
 
-      // Example: Listen for data creation event
-      socket.on("dataCreated", (data) => {
-        console.log(data);
-        // Emit event to all connected clients
-        io.emit("newData", {
-          message: "New data created",
-          timestamp: Date.now(),
-        });
-      });
+    //   // Example: Listen for data creation event
+    //   socket.on("dataCreated", (data) => {
+    //     console.log(data);
+    //     // Emit event to all connected clients
+    //     io.emit("newData", {
+    //       message: "New data created",
+    //       timestamp: Date.now(),
+    //     });
+    //   });
 
-      socket.on("disconnect", () => {
-        console.log("Client disconnected");
-      });
-    });
+    //   socket.on("disconnect", () => {
+    //     console.log("Client disconnected");
+    //   });
+    // });
 
     return res.status(201).json({
       code: 201,

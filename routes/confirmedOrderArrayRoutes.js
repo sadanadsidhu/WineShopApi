@@ -9,7 +9,7 @@ const {
 
 // Define routes
 router.post('/add-confirm-order', addConfirmOrder);
-router.get('/get-confirm-order/:id', getConfirmOrders);
+router.get('/get-confirm-order/:delevaryBoyId', getConfirmOrders);
 router.delete('/delete-confirm-order/:id', deleteConfirmedOrderById);
 
 
