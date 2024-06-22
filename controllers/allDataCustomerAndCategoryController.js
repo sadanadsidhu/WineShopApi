@@ -98,7 +98,7 @@ const getDataByShopId = async (req, res) => {
 
         // Find data based on shopId
         const data = await AllCustomerAndProductDetails.find({ shopDetails: shopId })
-            .populate('SubWineCategory')
+            .populate('productDetails')
             .populate('shopDetails')
             .populate('customerAddress');
 
