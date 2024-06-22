@@ -4,7 +4,7 @@ const confirmOrderArraySchema = new mongoose.Schema({
     
        confirmOrder : {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'AllCustomerAndProductDetails',
+                ref: 'CustomerAllOrder',
                 required: true
             },
             // shopId:{
@@ -14,7 +14,8 @@ const confirmOrderArraySchema = new mongoose.Schema({
             // },
             delevaryBoyId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'AllDeliveryBoyRegisterData'
+                ref: 'AllDeliveryBoyRegisterData',
+                required: true,
             }   
 });
 

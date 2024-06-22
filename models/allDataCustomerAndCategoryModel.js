@@ -43,7 +43,7 @@
 //     }],
 // }]);
 
-// module.exports = mongoose.model('AllCustomerAndProductDetails', allCustomerAndProductDetailsSchema);
+// module.exports = mongoose.model('CustomerAllOrder', allCustomerAndProductDetailsSchema);
 
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
@@ -88,6 +88,7 @@ const allCustomerAndProductDetailsSchema = new Schema({
         ref: 'WineShop',
         required: true,
     },
+    
 });
 
-module.exports = mongoose.model('AllCustomerAndProductDetails', allCustomerAndProductDetailsSchema);
+module.exports = mongoose.model('CustomerAllOrder', allCustomerAndProductDetailsSchema);

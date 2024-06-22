@@ -1,4 +1,4 @@
-const AllCustomerAndProductDetails = require("../models/allDataCustomerAndCategoryModel");
+const CustomerAllOrder = require("../models/allDataCustomerAndCategoryModel");
 const mongoose = require("mongoose");
 const generateOrderId = () => {
   // Generate a random 6-digit number
@@ -19,7 +19,7 @@ const createDataCustomerAndProduct = async (req, res) => {
       productDetails,
       shopDetails,
     } = req.body;
-    const newData = new AllCustomerAndProductDetails({
+    const newData = new CustomerAllOrder({
       orderId,
       totalPriceSum,
       deliveryCharges,
@@ -46,7 +46,7 @@ const createDataCustomerAndProduct = async (req, res) => {
 //////////////////////////////////////////// GET ALL ORDERERS ////////////////////////////////////////////
 // const getAllDataCustomerAndProduct = async (req, res) => {
 //     try {
-//         const allData = await AllCustomerAndProductDetails.find()
+//         const allData = await CustomerAllOrder.find()
 //             .populate('AddToCart')
 //             .populate('shopDetails')
 //             .populate('customerAddress');
@@ -62,7 +62,7 @@ const createDataCustomerAndProduct = async (req, res) => {
 // };
 const getAllDataCustomerAndProduct = async (req, res) => {
   try {
-    const allData = await AllCustomerAndProductDetails.find()
+    const allData = await CustomerAllOrder.find()
       .populate("productDetails") // Correct reference name
       .populate("shopDetails")
       .populate("customerAddress");
@@ -88,7 +88,7 @@ const getDataByOrderId = async (req, res) => {
     const { orderId } = req.params;
 
     // Query the database for data with the specified order ID
-    const data = await AllCustomerAndProductDetails.findOne({ orderId });
+    const data = await CustomerAllOrder.findOne({ orderId });
 
     // Check if data exists
     if (!data) {
@@ -114,7 +114,7 @@ const getDataByShopId = async (req, res) => {
     const { shopId } = req.params;
 
     // Find data based on shopId
-    const data = await AllCustomerAndProductDetails.find({
+    const data = await CustomerAllOrder.find({
       shopDetails: shopId,
     })
       .populate("productDetails")
@@ -141,7 +141,7 @@ const updateDataCustomerAndProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
-    const updatedData = await AllCustomerAndProductDetails.findByIdAndUpdate(
+    const updatedData = await CustomerAllOrder.findByIdAndUpdate(
       id,
       newData,
       { new: true }
@@ -164,33 +164,44 @@ const updateDataCustomerAndProduct = async (req, res) => {
 };
 //////////////////////////////////////////// DELETE ORDER ACCORDING TO ID /////////////////////////////////////////////////
 const deleteDataCustomerAndProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deletedData = await AllCustomerAndProductDetails.findByIdAndDelete(
-      id
-    );
-
-    if (!deletedData) {
-      return res.status(404).json({ code: 404, message: "Data not found" });
+    try {
+      const { id } = req.params; // Get the document ID from the request parameters
+  
+      // Check if the provided ID is valid
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ code: 400, message: "Invalid ID" });
+      }
+  
+      // Find the document in CustomerAllOrder and delete it
+      const deletedData = await CustomerAllOrder.findByIdAndDelete(id);
+  
+      if (!deletedData) {
+        return res.status(404).json({ code: 404, message: "Data not found" });
+      }
+  
+      // Optionally, you can remove references in ConfirmOrder if required
+      // For example, you may want to remove references to the deleted data in ConfirmOrder
+    //   await ConfirmOrder.updateMany(
+    //     { confirmOrder: id }, // Find all ConfirmOrder documents that reference the deleted document
+    //     { $unset: { confirmOrder: "" } } // Remove the reference
+    //   );
+  
+      return res.status(200).json({
+        code: 200,
+        message: "Data deleted successfully.",
+        data: deletedData,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ code: 500, message: "Server error", error: error.message });
     }
-
-    return res.status(200).json({
-      code: 200,
-      message: "Data deleted successfully.",
-      data: deletedData,
-    });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ code: 500, message: "Server error", error: error.message });
-  }
-};
+  };
 
 /////////////////////////////////////////////////// DELETE ALL AT ONE TIME /////////////////////////////
 const deleteAllDataCustomerAndProduct = async (req, res) => {
   try {
     // Delete all documents in the collection
-    await AllCustomerAndProductDetails.deleteMany({});
+    await CustomerAllOrder.deleteMany({});
 
     // Return success response
     return res
@@ -221,7 +232,7 @@ const deleteProductFromOrder = async (req, res) => {
     console.log("Searching for product with ID:", productObjectId);
 
     // Find the order containing the product
-    const orderWithProduct = await AllCustomerAndProductDetails.findOne({
+    const orderWithProduct = await CustomerAllOrder.findOne({
       "productDetails._id": productObjectId
     });
 
@@ -234,7 +245,7 @@ const deleteProductFromOrder = async (req, res) => {
     console.log("Order found:", orderWithProduct);
 
     // Update the document to remove the product from the productDetails array
-    const updatedDocument = await AllCustomerAndProductDetails.updateOne(
+    const updatedDocument = await CustomerAllOrder.updateOne(
       { "productDetails._id": productObjectId },
       { $pull: { productDetails: { _id: productObjectId } } },
       { new: true }
@@ -256,6 +267,65 @@ const deleteProductFromOrder = async (req, res) => {
     return res.status(500).json({ code: 500, message: "Server error", error: error.message });
   }
 };
+/////////////////////// delete order by id ///////////////////////////////////////////////////////
+const deleteOrderById = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the document ID from the request parameters
+
+    // Check if the provided ID is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ code: 400, message: "Invalid ID format" });
+    }
+
+    // Find the document in CustomerAllOrder and delete it
+    const deletedOrder = await CustomerAllOrder.findByIdAndDelete(id);
+
+    // If the document is not found
+    if (!deletedOrder) {
+      return res.status(404).json({ code: 404, message: "Order not found" });
+    }
+
+    // Return success response
+    return res.status(200).json({
+      code: 200,
+      message: "Order deleted successfully.",
+      data: deletedOrder,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ code: 500, message: "Server error", error: error.message });
+  }
+};
+
+//// delete according to random generate order id //////////////////////////////////////
+const deleteOrderByOrderId = async (req, res) => {
+  try {
+    const { orderId } = req.params; // Extract the orderId from the request parameters
+
+    // Ensure that orderId is a number or string, depending on your schema
+    if (isNaN(orderId)) {
+      return res.status(400).json({ code: 400, message: "Invalid orderId format" });
+    }
+
+    // Find the document in CustomerAllOrder by orderId and delete it
+    const deletedOrder = await CustomerAllOrder.findOneAndDelete({ orderId });
+
+    // If the document is not found
+    if (!deletedOrder) {
+      return res.status(404).json({ code: 404, message: "Order not found" });
+    }
+
+    // Return success response
+    return res.status(200).json({
+      code: 200,
+      message: "Order deleted successfully.",
+      data: deletedOrder,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ code: 500, message: "Server error", error: error.message });
+  }
+};
 
 module.exports = {
   createDataCustomerAndProduct,
@@ -265,5 +335,7 @@ module.exports = {
   updateDataCustomerAndProduct,
   deleteDataCustomerAndProduct,
   deleteAllDataCustomerAndProduct,
-  deleteProductFromOrder
+  deleteProductFromOrder,
+  deleteOrderById,
+  deleteOrderByOrderId
 };

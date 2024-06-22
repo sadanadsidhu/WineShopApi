@@ -12,16 +12,24 @@ const server = require("http").createServer(app);
 const io = socketIo(server);
 
 // WebSocket server logic
-io.on("connection", (socket) => {
-  console.log("Client connected");
+io.on('connection', (socket) => {
+  console.log('Client connected');
 
-  // Example: Listen for data creation event
-  socket.on("dataCreated", () => {
-    io.emit("newData"); // Emit event to all connected clients
+  // Log any received message
+  socket.onAny((event, ...args) => {
+      console.log(`Received event: ${event}`);
+      console.log(`Received data: ${JSON.stringify(args)}`);
   });
 
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
+  // Example: Listen for data creation event
+  socket.on('dataCreated', (data) => {
+    console.log(data);
+      // Emit event to all connected clients
+      io.emit('newData', { message: 'New data created', timestamp: Date.now() });
+  });
+
+  socket.on('disconnect', () => {
+      console.log('Client disconnected');
   });
 });
 

@@ -10,19 +10,40 @@ const io = socketIo(server);
 
 app.use(express.json());
 
-// WebSocket server logic
+// // WebSocket server logic
+// const io = require('socket.io')(2020); // Example port
+
 io.on('connection', (socket) => {
     console.log('Client connected');
 
+    // Log any received message
+    socket.onAny((event, ...args) => {
+        console.log(`Received event: ${event}`);
+        console.log(`Received data: ${JSON.stringify(args)}`);
+    });
+
     // Example: Listen for data creation event
     socket.on('dataCreated', () => {
-        // io.emit('newData'); // Emit event to all connected clients
-        io.emit('newData', { message: 'New data created', timestamp: Date.now() }); });
+        // Emit event to all connected clients
+        io.emit('newData', { message: 'New data created', timestamp: Date.now() });
+    });
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
 });
+// io.on('connection', (socket) => {
+//     console.log('Client connected');
+
+//     // Example: Listen for data creation event
+//     socket.on('dataCreated', () => {
+//         // io.emit('newData'); // Emit event to all connected clients
+//         io.emit('newData', { message: 'New data created', timestamp: Date.now() }); });
+
+//     socket.on('disconnect', () => {
+//         console.log('Client disconnected');
+//     });
+// });
  /////// GENERATE OREDER ID FOR EVERY ORDERID CREATE NEW ID ///////////////////////////////////////////
 const generateOrderId = () => {
     const min = 100000; // Minimum six-digit number (100000)
