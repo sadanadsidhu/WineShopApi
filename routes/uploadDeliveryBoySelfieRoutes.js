@@ -9,7 +9,7 @@ const {
 
 // Define routes
 router.post('/upload/delivery/selfie/photo', uploadDeliveryBoyPhoto);
-router.get('/get/delivery/selfie/photo', getDeliveryBoyPhoto);
+router.get('/imagesdeliveryboyselfie/:imageName', getDeliveryBoyPhoto);
 router.get('/get-get-order-array/:shopId', getDeliveryPhotoByFile);
 
 

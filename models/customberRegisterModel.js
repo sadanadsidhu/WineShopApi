@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema; 
+const Schema = mongoose.Schema;
 const addressSchema = new Schema({
   houseFlatBlockNo: {
     type: Number,
@@ -11,19 +11,19 @@ const addressSchema = new Schema({
   },
   pinCode: {
     type: Number,
-    required: true, 
+    required: true,
   },
   landmark: {
     type: String,
-    required: true, 
+    required: true,
   },
   lognitude: {
     type: Number,
-    required: false, 
+    required: false,
   },
   latitude: {
     type: Number,
-    required: false, 
+    required: false,
   },
 });
 const CustomerSchema = new Schema({
@@ -49,6 +49,6 @@ const CustomerSchema = new Schema({
   },
 });
 
-const   Customer = mongoose.model("Customer", CustomerSchema);
+const Customer = mongoose.model("Customer", CustomerSchema);
 
 module.exports = Customer;

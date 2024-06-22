@@ -5,7 +5,8 @@ const {
     getAllDeliveryBoys,
     getDeliveryBoyById,
     deleteDeliveryBoyById,
-    updateDeliveryBoyById
+    updateDeliveryBoyById,
+    getDeliveryBoyByMobileNumber
 
 } = require('../controllers/deliverBoyRegistrationController');
 
@@ -15,6 +16,7 @@ router.get('/get/register/delivery/boy', getAllDeliveryBoys);
 router.get('/get-get-order-array/:shopId', getDeliveryBoyById);
 router.get('/get-get-order-array/:shopId', deleteDeliveryBoyById);
 router.get('/get-get-order-array/:shopId', updateDeliveryBoyById);
+router.get('/get/delivery/information/:mobileNumber', getDeliveryBoyByMobileNumber);
 
 
 module.exports = router

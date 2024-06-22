@@ -83,11 +83,25 @@ const updateDeliveryBoyById = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
-
+///////////////////////// get delivery boy information //////////////////////////////////
+const getDeliveryBoyByMobileNumber = async (req, res) => {
+    const { mobileNumber } = req.params; // Extract mobile number from request parameters
+    try {
+        const deliveryBoy = await AllDeliveryBoyRegisterData.findOne({ mobileNumber: mobileNumber });
+        if (!deliveryBoy) {
+            return res.status(404).json({ message: 'Delivery boy not found' });
+        }
+        res.status(200).json({ data: deliveryBoy });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
 module.exports = {
     registerDeliveryBoy,
     getAllDeliveryBoys,
     getDeliveryBoyById,
     deleteDeliveryBoyById,
-    updateDeliveryBoyById
+    updateDeliveryBoyById,
+    getDeliveryBoyByMobileNumber
 };
